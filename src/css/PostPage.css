@@ -1,0 +1,21 @@
+.page-container {
+  background-color: hsl(143, 30%, 47%);
+  border-radius: 20px;
+  width: 440px;
+  height: auto;
+  position: relative;
+  align-items: center;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.posts-container,
+.textarea-container {
+  width: 90%;
+  margin: auto;
+  position: relative;
+}
+
+.textarea-container {
+  align-items: center;
+}

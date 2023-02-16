@@ -1,0 +1,39 @@
+.container-box {
+  background-color: rgb(240, 240, 240);
+  align-items: center;
+  text-align: center;
+  display: flex;
+  border: none;
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  box-sizing: border-box;
+  margin: 40px 0 0;
+  padding: 20px;
+  width: 396px;
+  margin-bottom: 35px;
+}
+
+.credentials {
+  border: 15px;
+  padding-left: 20px;
+}
+
+.btn-box {
+  /* margin: auto; */
+  width: 50%;
+  padding: 2px;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+@media (max-width: 435px) {
+  .form-box {
+    width: 90%;
+  }
+}

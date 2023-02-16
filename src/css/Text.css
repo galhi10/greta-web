@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-box {
+  border-radius: 15px 50px;
+  background: #549b6f;
+  padding: 20px;
+  width: 400px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.headline {
+  font-family: CircularStd, sans-serif;
+  color: white;
+  font-size: 35px;
+}
+
+@media screen and (max-width: 500px) {
+  .header-box {
+    width: 80%;
+  }
+  .headline {
+    font-size: 170%;
+  }
+}
+
+.error-msg {
+  color: red;
+}
