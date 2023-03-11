@@ -73,7 +73,7 @@ export default class Login extends Component {
 
     return (
       <div className="container">
-        <Headline data="Gal's Sociallll Network" />
+        <Headline data="Gal's Social2 Network" />
         <Container className="container-box">
           <div className="credentials">
             <Input data={username_input} />
