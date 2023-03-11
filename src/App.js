@@ -8,6 +8,7 @@ import MessagesPage from "./components/MessagesPage";
 import NavBar from "./components/NavBar";
 import { Cookie } from "./cookie";
 import About from "./components/About";
+import SystemConfig from "./components/SystemConfig";
 import ManageUsers from "./components/ManageUsers";
 import { GenerateSchedule } from "./components/GenerateSchedule";
 
@@ -44,6 +45,7 @@ export default class App extends Component {
             <Route path="messages/:page" element={<MessagesPage />} />
             <Route path="GenerateSchedule" element={<GenerateSchedule />} />
             <Route path="about" element={<About />} />
+            <Route path="systemconfig" element={<SystemConfig />} />
             <Route path="admin" element={<ManageUsers />} />
           </Routes>
         </header>

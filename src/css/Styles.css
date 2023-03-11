@@ -1,0 +1,40 @@
+.checkbox-row,
+.select-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.select-row select {
+  margin-left: 10px;
+}
+
+h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.header-box {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.checkboxes {
+  flex: 1;
+  margin-right: 50px;
+}
+
+.select-boxes {
+  flex: 1;
+}
+
+.header-box {
+  border-radius: 15px 50px;
+  background: #549b6f;
+  padding: 10px;
+  width: 1000px;
+  height: 600px;
+  display:grid;
+  justify-content: center;
+  align-items: center;
+}
