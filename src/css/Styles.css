@@ -38,3 +38,16 @@ h2 {
   justify-content: center;
   align-items: center;
 }
+
+.config-page {
+  font-size: 20px;
+  background: #549b6f;
+  align-items: center;
+  border-radius: 15px 50px;
+  padding: 10px;
+  width: 340px;
+  height: 600px;
+  display:grid;
+  justify-content: center;
+  align-items: center;
+}

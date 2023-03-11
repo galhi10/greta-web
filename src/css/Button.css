@@ -44,6 +44,10 @@
 .signup {
   background-color: #3b3d3c;
 }
+.config {
+  background-color: #3b3d3c;
+  width: 120px;
+}
 
 .message-send-btn {
   left: 35%;
