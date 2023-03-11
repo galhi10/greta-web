@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import LoginPage from "./components/LoginPage";
 import Signup from "./components/Signup";
-import PostsPage from "./components/PostPage";
+import GretaMainPage from "./components/GretaMainPage";
 import MessagesPage from "./components/MessagesPage";
 import NavBar from "./components/NavBar";
 import { Cookie } from "./cookie";
@@ -41,8 +41,7 @@ export default class App extends Component {
               element={<LoginPage loggedIn={this.doesTokenExists} />}
             />
             <Route path="signup" element={<Signup />} />
-            <Route path="posts/:page" element={<PostsPage />} />
-            <Route path="messages/:page" element={<MessagesPage />} />
+            <Route path="posts" element={<GretaMainPage />} />
             <Route path="GenerateSchedule" element={<GenerateSchedule />} />
             <Route path="about" element={<About />} />
             <Route path="systemconfig" element={<SystemConfig />} />
