@@ -34,6 +34,10 @@ export default class NavBar extends Component {
             <Link to="/Messages/1">Messages</Link>
           </li>
           <li>
+            <li></li>
+            <Link to="/GenerateSchedule">Irrigation Schedule</Link>
+          </li>
+          <li>
             <Link to="/About">About</Link>
           </li>
           <li>
