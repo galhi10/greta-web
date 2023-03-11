@@ -40,7 +40,7 @@ export default class Login extends Component {
         document.cookie =
           "token=Bearer " + responseJson.data.token + ";path=/posts";
         this.props.loggedIn();
-        window.location.href = "/posts/1";
+        window.location.href = "/posts";
       })
       .catch((err) => {
         this.setState({ msg: err.toString() });

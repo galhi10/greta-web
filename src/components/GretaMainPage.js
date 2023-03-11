@@ -1,4 +1,8 @@
 import React, { Component } from "react";
+// import * as React from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
 import Post from "./Post";
 import Text from "./Text";
 import "../css/PostPage.css";
@@ -7,7 +11,7 @@ import Container from "./Container";
 import { APIcall } from "../APIcalls";
 import { Cookie } from "../cookie";
 import "../css/pagination.css";
-export default class PostPage extends Component {
+export default class GretaMainPage extends Component {
   constructor(props) {
     super(props);
 
@@ -47,18 +51,17 @@ export default class PostPage extends Component {
         }
       })
       .then((responseJson) => {
-        this.setState({ postsArr: responseJson.data });
-        const url = window.location.href.split("/");
-
-        this.setState({
-          N_posts: this.state.postsArr.slice(
-            (url[url.length - 1] - 1) * this.state.N,
-            this.state.N * url[url.length - 1]
-          ),
-        });
-        this.setState({
-          numPages: Math.ceil(this.state.postsArr.length / this.state.N),
-        });
+        // this.setState({ postsArr: responseJson.data });
+        // const url = window.location.href.split("/");
+        // this.setState({
+        //   N_posts: this.state.postsArr.slice(
+        //     (url[url.length - 1] - 1) * this.state.N,
+        //     this.state.N * url[url.length - 1]
+        //   ),
+        // });
+        // this.setState({
+        //   numPages: Math.ceil(this.state.postsArr.length / this.state.N),
+        // });
       })
       .catch((err) => {
         this.setState({ msg: err.toString() });
@@ -112,24 +115,13 @@ export default class PostPage extends Component {
     };
     return (
       <div className="page-container">
-        <div className="textarea-container">
-          <Container>
-            <Text />
-            <Button data={submit_post_btn} />
-          </Container>
-        </div>
-        <div className="posts-container">
-          {this.state.N_posts.map((item, i) => (
-            <Post key={i} postData={item} reload={this.updatePostsList} />
-          ))}
-        </div>
-        <div className="pagination">
-          {[...new Array(this.state.numPages)].map((item, i) => (
-            <a key={i + 1} className="page-number" href={i + 1}>
-              {i + 1}
-            </a>
-          ))}
-        </div>
+        <Box sx={{ width: "100%", maxWidth: 500 }}>
+          <Typography variant="h1" gutterBottom>
+            h1. Heading
+          </Typography>
+        </Box>
+        <div className="textarea-container"></div>
+        <div className="posts-container"></div>
       </div>
     );
   }

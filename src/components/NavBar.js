@@ -19,26 +19,20 @@ export default class NavBar extends Component {
     return (
       <header className="header">
         <h1 className="headline">
-          <Link to="/Posts/1">GSN</Link>
+          <Link to="/posts">GSN</Link>
         </h1>
         <ul className="main-nav">
           {this.state.user_id == config.admin_id ? (
             <li>
-              <Link to="/Admin">Manage Users</Link>
+              <Link to="/admin">Manage Users</Link>
             </li>
           ) : undefined}
           <li>
-            <Link to="/Posts/1">Posts</Link>
-          </li>
-          <li>
-            <Link to="/Messages/1">Messages</Link>
-          </li>
-          <li>
             <li></li>
-            <Link to="/GenerateSchedule">Irrigation Schedule</Link>
+            <Link to="/generateSchedule">Irrigation Schedule</Link>
           </li>
           <li>
-            <Link to="/About">About</Link>
+            <Link to="/about">About</Link>
           </li>
           <li>
             <Link to="/SystemConfig">SystemConfig</Link>
