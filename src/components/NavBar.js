@@ -19,7 +19,7 @@ export default class NavBar extends Component {
     return (
       <header className="header">
         <h1 className="headline">
-          <Link to="/posts">GSN</Link>
+          <Link to="/greta">GSN</Link>
         </h1>
         <ul className="main-nav">
           {this.state.user_id == config.admin_id ? (

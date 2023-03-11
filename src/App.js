@@ -41,7 +41,7 @@ export default class App extends Component {
               element={<LoginPage loggedIn={this.doesTokenExists} />}
             />
             <Route path="signup" element={<Signup />} />
-            <Route path="posts" element={<GretaMainPage />} />
+            <Route path="greta" element={<GretaMainPage />} />
             <Route path="GenerateSchedule" element={<GenerateSchedule />} />
             <Route path="about" element={<About />} />
             <Route path="systemconfig" element={<SystemConfig />} />
