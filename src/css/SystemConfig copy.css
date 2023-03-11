@@ -1,0 +1,90 @@
+.systemconfig {
+  color: rgb(42, 143, 66);
+  white-space: pre;
+  line-break: auto;
+
+}
+
+.header-box {
+  border-radius: 15px 50px;
+  background: #549b6f;
+  padding: 20px;
+  width: 1000px;
+  height: 60px;
+  display:grid;
+  justify-content: center;
+  align-items: center;
+}
+
+.mainbox {
+  margin-left: auto;
+  margin-right: auto;
+  font-family: CircularStd, sans-serif;
+  width: 396px;
+  height: auto;
+}
+
+.headline {
+  font-family: CircularStd, sans-serif;
+  color: white;
+  font-size: 35px;
+}
+.green-box {
+  background: hsl(143, 30%, 47%);
+  width: auto;
+  height: 300px;
+  padding-top: 6px;
+  border-radius: 10px;
+  min-width: 50px;
+  float: left;
+}
+
+.select {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 15px;
+  width: 100%;
+}    .select select {
+      font-family: 'Arial';
+      display: inline-block;
+      width: 100%;
+      cursor: pointer;
+      padding: 10px 00px;
+      outline: 0;
+      border: 1px solid #000000;
+      border-radius: 11px;
+      background: #e6e6e6;
+      color: #7b7b7b;
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+  }
+      .select select::-ms-expand {
+          display: none;
+      }
+      .select select:hover,
+      .select select:focus {
+          color: #000000;
+          background: #cccccc;
+      }
+      .select select:disabled {
+          opacity: 0.5;
+          pointer-events: none;
+      }
+.select_arrow {
+  position: absolute;
+  top: 21px;
+  right: 15px;
+  pointer-events: none;
+  border-style: solid;
+  border-width: 8px 5px 0px 5px;
+  border-color: #7b7b7b transparent transparent transparent;
+}
+.select select:hover ~ .select_arrow,
+.select select:focus ~ .select_arrow {
+  border-top-color: #000000;
+}
+.select select:disabled ~ .select_arrow {
+  border-top-color: #cccccc;
+}
+

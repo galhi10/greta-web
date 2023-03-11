@@ -37,6 +37,9 @@ export default class NavBar extends Component {
             <Link to="/About">About</Link>
           </li>
           <li>
+            <Link to="/SystemConfig">SystemConfig</Link>
+          </li>
+          <li>
             <Link
               onClick={() => {
                 Cookie.deleteToken();
