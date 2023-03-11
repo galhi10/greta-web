@@ -38,9 +38,9 @@ export default class Login extends Component {
       })
       .then((responseJson) => {
         document.cookie =
-          "token=Bearer " + responseJson.data.token + ";path=/posts";
+          "token=Bearer " + responseJson.data.token + ";path=/greta";
         this.props.loggedIn();
-        window.location.href = "/posts";
+        window.location.href = "/greta";
       })
       .catch((err) => {
         this.setState({ msg: err.toString() });

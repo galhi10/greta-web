@@ -6,11 +6,13 @@ import Typography from "@mui/material/Typography";
 import Post from "./Post";
 import Text from "./Text";
 import "../css/PostPage.css";
-import Button from "./Button";
 import Container from "./Container";
 import { APIcall } from "../APIcalls";
 import { Cookie } from "../cookie";
 import "../css/pagination.css";
+import Button from "@mui/material/Button";
+import { Routes, Route, Link } from "react-router-dom";
+
 export default class GretaMainPage extends Component {
   constructor(props) {
     super(props);
@@ -115,10 +117,20 @@ export default class GretaMainPage extends Component {
     };
     return (
       <div className="page-container">
-        <Box sx={{ width: "100%", maxWidth: 500 }}>
-          <Typography variant="h1" gutterBottom>
-            h1. Heading
+        <Box sx={{ width: "100%" }}>
+          <Typography variant="h3" gutterBottom>
+            Welcome to Greta:
           </Typography>
+          <Typography variant="h3" gutterBottom>
+            Your smart irrigation system
+          </Typography>
+          <Typography>To setup your irrigation schedule</Typography>
+          <Link to="/systemConfig">
+            <Button variant="contained">
+              {" "}
+              <Typography>Press here</Typography>
+            </Button>
+          </Link>
         </Box>
         <div className="textarea-container"></div>
         <div className="posts-container"></div>
