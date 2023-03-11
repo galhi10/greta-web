@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import "../css/GenerateSchedule.css";
 
 const data = [
@@ -17,21 +16,26 @@ export class GenerateSchedule extends Component {
   render() {
     return (
       <div className="GenerateSchedule">
-        <table>
-          <tr>
-            <th> Day</th>
-            <th> Hour </th>
-            <th> Status</th>
-          </tr>
-          {data.map((val, key) => {
-            return (
-              <tr key={key}>
-                <td>{val.Day}</td>
-                <td>{val.Hour}</td>
-                <td>{val.Status}</td>
-              </tr>
-            );
-          })}
+        <h1 className="title">Irrigation schedule</h1>
+        <table className="table">
+          <thead>
+            <tr>
+              <th> Day</th>
+              <th> Hour </th>
+              <th> Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((val, key) => {
+              return (
+                <tr key={key}>
+                  <td>{val.Day}</td>
+                  <td>{val.Hour}</td>
+                  <td>{val.Status}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
     );
