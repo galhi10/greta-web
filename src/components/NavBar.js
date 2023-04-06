@@ -32,10 +32,10 @@ export default class NavBar extends Component {
             <Link to="/generateSchedule">Irrigation Schedule</Link>
           </li>
           <li>
-            <Link to="/about">About</Link>
+            <Link to="/SystemConfig">SystemConfig</Link>
           </li>
           <li>
-            <Link to="/SystemConfig">SystemConfig</Link>
+            <Link to="/about">About</Link>
           </li>
           <li>
             <Link
