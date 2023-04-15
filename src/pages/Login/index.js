@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
 
-import { login } from "../api/user";
+import { login } from "../../api/user";
 import {Button, Checkbox, Col, Form, Input, Row, Typography} from "antd";
-import Card from "../components/antd/card";
+import Card from "../../components/antd/card";
 
-import "./LoginPage.css";
+import "./index.css";
 
-const LoginPage = () => {
+const Login = () => {
 
   const onFinish = async (values) => {
     console.log("Success:", values);
@@ -78,4 +78,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default Login;
