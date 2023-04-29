@@ -21,4 +21,24 @@ const login = async (email, password) => {
   return response;
 };
 
-export { login };
+const createUser = async (email, password, firstName, lastName) => {
+  const body = {
+    email,
+    password,
+    firstName,
+    lastName,
+  };
+  const response = await axios
+    .put(`${config.path}${userAPI}/create`, body)
+    .then(async (response) => {
+      console.log("🚀 ~ file: user.js:14 ~ .then ~ response:", response);
+      return response;
+    })
+    .catch(async (error) => {
+      console.log("🚀 ~ file: user.js:17 ~ login ~ error:", error);
+      return error.response.data;
+    });
+  return response;
+};
+
+export { login, createUser };
