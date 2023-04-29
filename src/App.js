@@ -11,6 +11,7 @@ import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import MainPage from "./pages/MainPage";
 import ConfigPage from "./pages/ConfigPage";
 import RegisterPage from "./pages/Register";
+import AppLayout from "./components/AppLayout";
 
 function App() {
   const { token, setToken } = useToken();
@@ -25,28 +26,33 @@ function App() {
       element: <RegisterPage />,
     },
     {
-      path: "/MainPage",
-      element: (
-        <AuthenticatedRoute>
-          <MainPage />
-        </AuthenticatedRoute>
-      ),
-    },
-    {
-      path: "/ConfigPage",
-      element: (
-        <AuthenticatedRoute>
-          <ConfigPage />
-        </AuthenticatedRoute>
-      ),
+      element: <AppLayout />,
+      children: [
+        {
+          path: "/MainPage",
+          element: (
+            <AuthenticatedRoute>
+              <MainPage />
+            </AuthenticatedRoute>
+          ),
+        },
+        {
+          path: "/ConfigPage",
+          element: (
+            <AuthenticatedRoute>
+              <ConfigPage />
+            </AuthenticatedRoute>
+          ),
+        },
+      ],
     },
   ]);
 
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header"> */}
         <RouterProvider router={router} />
-      </header>
+      {/* </header> */}
     </div>
   );
 }
