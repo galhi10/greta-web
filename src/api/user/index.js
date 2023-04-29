@@ -12,7 +12,7 @@ const login = async (email, password) => {
     .post(`${config.path}${userAPI}/login`, body)
     .then(async (response) => {
       console.log("🚀 ~ file: user.js:14 ~ .then ~ response:", response);
-      return response;
+      return response.data.data;
     })
     .catch(async (error) => {
       console.log("🚀 ~ file: user.js:17 ~ login ~ error:", error);

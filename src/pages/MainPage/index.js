@@ -7,22 +7,31 @@ import Card from "../../components/antd/card";
 const DemoBox = (props) => <p className={`height-${props.value}`}>{props.children}</p>;
 
 import "./index.css";
+import backgroundImage from './MainPagePic.jpg';
+
 
 function MainPage() {
   return (
     <>
+     <div style={{
+       backgroundImage: `url(${backgroundImage})`,
+       backgroundSize: 'cover',
+       backgroundPosition: 'center',
+       backgroundRepeat: 'no-repeat',
+       imageRendering: 'optimizeQuality', 
+       backfaceVisibility: 'hidden',
+      }}>
       <Row justify="start">
-        <Col span={6} offset = {2}>
-          <h1 className="main-heading">Greta</h1>
+        <Col span={14}>
+          <h1 className="main-heading">GRETA - Sustainable Irrigation System</h1>
         </Col>
       </Row>
-      <Row>
+      {/* <Row>
         <Col span={12}>
           <h1 className="Sustainable">Sustainable Irrigation System</h1>
         </Col>
-      </Row>
+      </Row> */}
       <Row><h1></h1> </Row>
-      <Row><h1></h1></Row>
       <Row><h1></h1></Row>
       <Row><h1></h1></Row>
       <Row><h1></h1></Row>
@@ -34,6 +43,7 @@ function MainPage() {
        of water, and also makes sure you can give your
        plants the exact amount of water they need.</h1>
       </Col>
+    </div>
     </>
   );
 }
