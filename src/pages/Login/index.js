@@ -14,7 +14,7 @@ const Login = ({ setToken, token }) => {
   const onFinish = async (values) => {
     const response = await login(values.email, values.password);
     setToken(response.token);
-    navigate("/dashboard");
+    navigate("/MainPage");
   };
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -81,7 +81,7 @@ const Login = ({ setToken, token }) => {
       </Form>
     </Card>
   ) : (
-    <Navigate to={"/dashboard"} />
+    <Navigate to={"/MainPage"} />
   );
 };
 
