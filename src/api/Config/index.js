@@ -2,13 +2,17 @@ import axios from "axios";
 
 const configAPI = "Config";
 
-const config = async (region, light, grassType, soilType) => {
+const Config = async (grassType, Mode, LoanSize, soilType, Region, TubeCapacity, LightCondition) => {
   const body = {
-    region,
-    light,
     grassType,
-    soilType
+    Mode,
+    LoanSize,
+    soilType,
+    Region,
+    TubeCapacity, 
+    LightCondition
   };
+
   const response = await axios
     .post(`${config.path}${configAPI}/setConfig`, body)
     .then(async (response) => {
@@ -22,4 +26,4 @@ const config = async (region, light, grassType, soilType) => {
   return response;
 };
 
-export { config };
+export { Config };

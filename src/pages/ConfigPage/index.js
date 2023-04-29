@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import { Button, Form, } from "antd";
 import "./index.css";
-import {
-  Select,
-  Space,
-  InputNumber,
-  Radio,
-} from 'antd';
+// import { Config } from "../../api/config";
 
-const { Option } = Select;
+import {Select, Space, Input, InputNumber, Radio, Card,} from 'antd';
 
 const formItemLayout = {
     labelCol: {
@@ -30,13 +25,14 @@ const formItemLayout = {
     const [message, setMessage] = useState("");
     
     const onFinish =  async (values) => {
-        const response = await ConfigPage(values.GrassType, values.Mode, values.LoanSize, values.SoilType,
-             values.Region, values.TubeCapacity, values.LightCondition);
+        // const response = await Config(values.GrassType, values.Mode, values.LoanSize, values.SoilType,
+        //      values.Region, values.TubeCapacity, values.LightCondition);
         console.log('Received values of form: ', values);
-        setMessage(response);
+        // setMessage(response);
       };
 
     return(
+    <Card className="card">
     <Form
       name="validate_other"
       {...formItemLayout}
@@ -47,7 +43,6 @@ const formItemLayout = {
       <Form.Item
         name="Region"
         label="Region"
-        hasFeedback
         rules={[
           {
             required: true,
@@ -55,18 +50,30 @@ const formItemLayout = {
           },
         ]}
       >
-  <Select style={{ width: '250px' }} placeholder="Please select a region">
-         <option value="The Mountain Area">The Mountain Area</option>
-         <option value="The Coastal Plain">The Coastal Plain</option>
-         <option value="Negev and the Vallies">Negev and the Vallies</option>
-         <option value="Eilat and the Arava">Eilat and the Arava</option>
+  <Select style={{ width: '300px' }} placeholder="Please select a region" options={[
+        {
+          value: 'The Mountain Area',
+          label: 'The Mountain Area',
+        },
+        {
+          value: 'The Coastal Plain',
+          label: 'The Coastal Plain',
+        },
+        {
+          value: 'Negev and the Vallies',
+          label: 'Negev and the Vallies',
+        },
+        {
+          value: 'Eilat and the Arava',
+          label: 'Eilat and the Arava',
+        },
+      ]} >
         </Select>
       </Form.Item>
     
       <Form.Item
         name="LightCondition"
-        label="Light"
-        hasFeedback
+        label="Light Condition"
         rules={[
           {
             required: true,
@@ -74,7 +81,7 @@ const formItemLayout = {
           },
         ]}
       >
-  <Select style={{ width: '250px' }} placeholder="Please select the light condition">
+  <Select style={{ width: '300px' }} placeholder="Please select  light condition">
          <option value="Direct sun">Direct sun</option>
          <option value="Partial shade">Partial shade</option>
         </Select>
@@ -84,7 +91,6 @@ const formItemLayout = {
       <Form.Item
         name="GrassType"
         label="Grass Type"
-        hasFeedback
         rules={[
           {
             required: true,
@@ -92,7 +98,7 @@ const formItemLayout = {
           },
         ]}
       >
-  <Select style={{ width: '250px' }} placeholder="Please select a grass type">
+  <Select style={{ width: '300px' }} placeholder="Please select a grass type">
          <option value="A">A</option>
          <option value="B">B</option>
          <option value="C">C</option>
@@ -102,7 +108,6 @@ const formItemLayout = {
       <Form.Item
         name="SoilType"
         label="Soil Type"
-        hasFeedback
         rules={[
           {
             required: true,
@@ -110,7 +115,7 @@ const formItemLayout = {
           },
         ]}
       >
-  <Select style={{ width: '250px' }} placeholder="Please select a soil type">
+  <Select style={{ width: '300px' }} placeholder="Please select a soil type">
          <option value="Hard">Hard</option>
          <option value="Soft">Soft</option>
          <option value="Medium">Medium</option>
@@ -120,46 +125,35 @@ const formItemLayout = {
       <Form.Item
       name = "LoanSize"
       label="Loan size"
-      hasFeedback
       rules={[
         {
           required: true,
           message: 'Please insert loan size!',
         },
       ]}
->
-  <InputNumber style={{ width: '250px' }} min={1} placeholder="Please insert loan size" />
-      <span className="ant-form-text" style={{ marginLeft: 8 }}>
-        Sqare Meters
-      </span>
+><InputNumber style={{ width: '300px' }} min={1} placeholder="Insert loan size (Square Meters)" />
     </Form.Item>
 
     <Form.Item
       name = "TubeCapacity"
       label="Tube capacity"
-      hasFeedback
       rules={[
         {
           required: true,
-          message: 'Please insert tube capacity!',
-
+          message: 'Insert tube capacity!',
         },
       ]}
 >
-<InputNumber style={{ width: '250px' }} min={1} placeholder="Please insert Tube capacity" />
-      <span className="ant-form-text" style={{ marginLeft: 8 }}>
-        Liters Per Minute
-      </span>
+    <InputNumber style={{ width: '300px' }} min={1} placeholder="Insert tube capacity (Liters Per Minute)" /> 
     </Form.Item>
 
     <Form.Item
       name="Mode"
       label="Activation mode"
-      hasFeedback
       rules={[
         {
           required: true,
-          message: 'Please insert activation capacity!',
+          message: 'Insert activation mode!',
 
         },
       ]}>
@@ -183,7 +177,7 @@ const formItemLayout = {
         </Space>
       </Form.Item>
     </Form>
+    </Card>
   )};
-
 
 export default ConfigPage;
