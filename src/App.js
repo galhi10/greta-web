@@ -10,7 +10,7 @@ import useToken from "./hooks/useToken";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import MainPage from "./pages/MainPage";
 import ConfigPage from "./pages/ConfigPage";
-
+import RegisterPage from "./pages/Register";
 
 function App() {
   const { token, setToken } = useToken();
@@ -21,10 +21,14 @@ function App() {
       element: <Login setToken={setToken} token={token} />,
     },
     {
+      path: "/register",
+      element: <RegisterPage />,
+    },
+    {
       path: "/MainPage",
       element: (
         <AuthenticatedRoute>
-          <MainPage/>
+          <MainPage />
         </AuthenticatedRoute>
       ),
     },
@@ -32,9 +36,8 @@ function App() {
       path: "/ConfigPage",
       element: (
         <AuthenticatedRoute>
-          <ConfigPage/>
+          <ConfigPage />
         </AuthenticatedRoute>
-
       ),
     },
   ]);

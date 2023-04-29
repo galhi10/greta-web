@@ -72,6 +72,7 @@ const Login = ({ setToken, token }) => {
                 type="primary"
                 htmlType="button"
                 style={{ backgroundColor: "grey" }}
+                onClick={() => navigate("/register")}
               >
                 Sign up
               </Button>
