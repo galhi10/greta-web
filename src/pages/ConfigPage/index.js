@@ -7,21 +7,7 @@ import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
 import Card from "../../components/antd/card";
 const DemoBox = (props) => <p className={`height-${props.value}`}>{props.children}</p>;
 
-// import React, { useState } from 'react';
 import "./index.css";
-
-
-// // function ConfigPage() {
-//   return (
-//       <Row justify="start">
-//         <Col span={8} offset = {2}>
-//           <h1 className="main-heading">Greta</h1>
-//         </Col>
-//       </Row>
-//   );
-// }
-
-
 import { InboxOutlined, UploadOutlined } from '@ant-design/icons';
 import {
   InputNumber,

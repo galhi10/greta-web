@@ -26,11 +26,6 @@ function MainPage() {
           <h1 className="main-heading">GRETA - Sustainable Irrigation System</h1>
         </Col>
       </Row>
-      {/* <Row>
-        <Col span={12}>
-          <h1 className="Sustainable">Sustainable Irrigation System</h1>
-        </Col>
-      </Row> */}
       <Row><h1></h1> </Row>
       <Row><h1></h1></Row>
       <Row><h1></h1></Row>
