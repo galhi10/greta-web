@@ -1,23 +1,11 @@
 import React, { useState } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-
-import { login } from "../../api/user";
-import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
-
-import Card from "../../components/antd/card";
-const DemoBox = (props) => <p className={`height-${props.value}`}>{props.children}</p>;
-
+import { Button, Form, } from "antd";
 import "./index.css";
-import { InboxOutlined, UploadOutlined } from '@ant-design/icons';
 import {
+  Select,
+  Space,
   InputNumber,
   Radio,
-  Rate,
-  Select,
-  Slider,
-  Space,
-  Switch,
-  Upload,
 } from 'antd';
 
 const { Option } = Select;
@@ -37,18 +25,27 @@ const formItemLayout = {
     }
     return e?.fileList;
   };
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
-  };
-  const ConfigPage = () => (
+
+  const ConfigPage = () =>{ 
+    const [message, setMessage] = useState("");
+    
+    const onFinish =  async (values) => {
+        const response = await ConfigPage(values.GrassType, values.Mode, values.LoanSize, values.SoilType,
+             values.Region, values.TubeCapacity, values.LightCondition);
+        console.log('Received values of form: ', values);
+        setMessage(response);
+      };
+
+    return(
     <Form
       name="validate_other"
       {...formItemLayout}
       onFinish={onFinish}
     >
       <h1 className="main-heading">System Configuration</h1>
+
       <Form.Item
-        name="select region"
+        name="Region"
         label="Region"
         hasFeedback
         rules={[
@@ -58,7 +55,7 @@ const formItemLayout = {
           },
         ]}
       >
-        <Select placeholder="Please select a region">
+  <Select style={{ width: '250px' }} placeholder="Please select a region">
          <option value="The Mountain Area">The Mountain Area</option>
          <option value="The Coastal Plain">The Coastal Plain</option>
          <option value="Negev and the Vallies">Negev and the Vallies</option>
@@ -67,7 +64,7 @@ const formItemLayout = {
       </Form.Item>
     
       <Form.Item
-        name="select light condition"
+        name="LightCondition"
         label="Light"
         hasFeedback
         rules={[
@@ -77,14 +74,15 @@ const formItemLayout = {
           },
         ]}
       >
-        <Select placeholder="Please select light conditions">
+  <Select style={{ width: '250px' }} placeholder="Please select the light condition">
          <option value="Direct sun">Direct sun</option>
          <option value="Partial shade">Partial shade</option>
         </Select>
       </Form.Item>
+      
 
       <Form.Item
-        name="select grass type"
+        name="GrassType"
         label="Grass Type"
         hasFeedback
         rules={[
@@ -94,7 +92,7 @@ const formItemLayout = {
           },
         ]}
       >
-        <Select placeholder="Please select your grass type">
+  <Select style={{ width: '250px' }} placeholder="Please select a grass type">
          <option value="A">A</option>
          <option value="B">B</option>
          <option value="C">C</option>
@@ -102,7 +100,7 @@ const formItemLayout = {
       </Form.Item>
 
       <Form.Item
-        name="select soil type"
+        name="SoilType"
         label="Soil Type"
         hasFeedback
         rules={[
@@ -112,12 +110,64 @@ const formItemLayout = {
           },
         ]}
       >
-        <Select placeholder="Please select your soil type">
+  <Select style={{ width: '250px' }} placeholder="Please select a soil type">
          <option value="Hard">Hard</option>
          <option value="Soft">Soft</option>
          <option value="Medium">Medium</option>
         </Select>
       </Form.Item>
+
+      <Form.Item
+      name = "LoanSize"
+      label="Loan size"
+      hasFeedback
+      rules={[
+        {
+          required: true,
+          message: 'Please insert loan size!',
+        },
+      ]}
+>
+  <InputNumber style={{ width: '250px' }} min={1} placeholder="Please insert loan size" />
+      <span className="ant-form-text" style={{ marginLeft: 8 }}>
+        Sqare Meters
+      </span>
+    </Form.Item>
+
+    <Form.Item
+      name = "TubeCapacity"
+      label="Tube capacity"
+      hasFeedback
+      rules={[
+        {
+          required: true,
+          message: 'Please insert tube capacity!',
+
+        },
+      ]}
+>
+<InputNumber style={{ width: '250px' }} min={1} placeholder="Please insert Tube capacity" />
+      <span className="ant-form-text" style={{ marginLeft: 8 }}>
+        Liters Per Minute
+      </span>
+    </Form.Item>
+
+    <Form.Item
+      name="Mode"
+      label="Activation mode"
+      hasFeedback
+      rules={[
+        {
+          required: true,
+          message: 'Please insert activation capacity!',
+
+        },
+      ]}>
+      <Radio.Group>
+        <Radio value="Automatic">Automatic</Radio>
+        <Radio value="Manual">Manual</Radio>
+      </Radio.Group>
+    </Form.Item>
 
       <Form.Item
         wrapperCol={{
@@ -133,7 +183,7 @@ const formItemLayout = {
         </Space>
       </Form.Item>
     </Form>
-  );
+  )};
 
 
 export default ConfigPage;
