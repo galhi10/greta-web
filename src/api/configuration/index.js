@@ -1,20 +1,27 @@
 import axios from "axios";
-
+import config from "../../config";
 const configAPI = "Config";
 
-const Config = async (grassType, Mode, LoanSize, soilType, Region, TubeCapacity, LightCondition) => {
+const SetConfig = async (
+  grass,
+  mode,
+  size,
+  ground,
+  location,
+  liters_per_minute,
+  light,
+  token
+) => {
   const body = {
-    grassType,
-    Mode,
-    LoanSize,
-    soilType,
-    Region,
-    TubeCapacity, 
-    LightCondition
+    config: { grass, mode, size, ground, location, liters_per_minute, light },
   };
-
+  console.log("body amir", body);
   const response = await axios
-    .post(`${config.path}${configAPI}/setConfig`, body)
+    .post(`${config.path}${configAPI}/setConfig`, body, {
+      headers: {
+        Authorization: `Berear ${token}`,
+      },
+    })
     .then(async (response) => {
       console.log("🚀 ~ file: user.js:14 ~ .then ~ response:", response);
       return response.data.data;
@@ -26,4 +33,4 @@ const Config = async (grassType, Mode, LoanSize, soilType, Region, TubeCapacity,
   return response;
 };
 
-export { Config };
+export { SetConfig };
