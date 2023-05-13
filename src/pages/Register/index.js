@@ -7,7 +7,6 @@ import Card from "../../components/antd/card";
 
 import "./index.css";
 import { Navigate, useNavigate } from "react-router-dom";
-import Marquee from "react-fast-marquee";
 import { delay } from "../../utils";
 
 const RegisterPage = () => {
