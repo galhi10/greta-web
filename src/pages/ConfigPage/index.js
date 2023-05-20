@@ -3,7 +3,11 @@ import { Button, Form } from "antd";
 import "./index.css";
 import { Select, Space, Input, InputNumber, Radio, Card } from "antd";
 import { SetConfig } from "../../api/configuration";
+import { GetConfig } from "../../api/configuration";
 import useToken from "../../hooks/useToken";
+import config from "../../config";
+import { useEffect } from "react";
+const configAPI = "Config";
 
 const formItemLayout = {
   labelCol: {
@@ -16,8 +20,13 @@ const formItemLayout = {
 
 const ConfigPage = () => {
   const [message, setMessage] = useState("");
+  const [config, setConfig] = useState({});
+  const [value, setValue] = useState("Automatic");
+  const onChange = (e) => {
+    console.log("radio checked", e.target.value);
+    setValue(e.target.value);
+  };
   const { token } = useToken();
-  console.log("token is ", token);
   const onFinish = async (values) => {
     const response = await SetConfig(
       values.GrassType,
@@ -29,8 +38,22 @@ const ConfigPage = () => {
       values.LightCondition,
       token
     );
-    setMessage(response);
+    console.log("blabla", response);
+    if (response) {
+      setMessage("successfully updated");
+    } else {
+      setMessage("Update was not successful. Please try again");
+    }
   };
+
+  useEffect(() => {
+    // make it as default values, so we'll be able to change only one field to submit
+    async function fetchData() {
+      const response2 = await GetConfig(token);
+      setConfig({ ...response2 });
+    }
+    fetchData();
+  }, []);
 
   return (
     <Card className="card">
@@ -49,7 +72,8 @@ const ConfigPage = () => {
         >
           <Select
             style={{ width: "300px" }}
-            placeholder="Please select a region"
+            placeholder={config.location}
+            defaultValue={config.location}
             options={[
               {
                 value: "The Mountain Area",
@@ -81,10 +105,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Select
-            style={{ width: "300px" }}
-            placeholder="Please select  light condition"
-          >
+          <Select style={{ width: "300px" }} placeholder={config.light}>
             <option value="Direct sun">Direct sun</option>
             <option value="Partial shade">Partial shade</option>
           </Select>
@@ -100,10 +121,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Select
-            style={{ width: "300px" }}
-            placeholder="Please select a grass type"
-          >
+          <Select style={{ width: "300px" }} placeholder={config.grass}>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
@@ -120,10 +138,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Select
-            style={{ width: "300px" }}
-            placeholder="Please select a soil type"
-          >
+          <Select style={{ width: "300px" }} placeholder={config.ground}>
             <option value="Hard">Hard</option>
             <option value="Soft">Soft</option>
             <option value="Medium">Medium</option>
@@ -143,7 +158,7 @@ const ConfigPage = () => {
           <InputNumber
             style={{ width: "300px" }}
             min={1}
-            placeholder="Insert loan size (Square Meters)"
+            placeholder={config.size}
           />
         </Form.Item>
 
@@ -160,13 +175,13 @@ const ConfigPage = () => {
           <InputNumber
             style={{ width: "300px" }}
             min={1}
-            placeholder="Insert tube capacity (Liters Per Minute)"
+            placeholder="to insert"
           />
         </Form.Item>
 
         <Form.Item
           name="Mode"
-          label="Activation mode"
+          label="Mode"
           rules={[
             {
               required: true,
@@ -174,7 +189,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Radio.Group>
+          <Radio.Group onChange={onChange} value={value}>
             <Radio value="Automatic">Automatic</Radio>
             <Radio value="Manual">Manual</Radio>
           </Radio.Group>
@@ -191,6 +206,7 @@ const ConfigPage = () => {
               Submit
             </Button>
             <Button htmlType="reset">reset</Button>
+            {message && <div>{message}</div>}
           </Space>
         </Form.Item>
       </Form>
