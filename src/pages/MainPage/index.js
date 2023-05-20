@@ -1,19 +1,29 @@
 import React, { useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-
 import { login } from "../../api/user";
 import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
 import Card from "../../components/antd/card";
 const DemoBox = (props) => (
   <p className={`height-${props.value}`}>{props.children}</p>
 );
-
+const CITY = "Haifa";
 import "./index.css";
+import { useEffect } from "react";
 import backgroundImage5 from "./tree.jpg";
-
-let currentHour = new Date().getTime();
+import { GetTemperature } from "../../api/weather";
 
 function MainPage() {
+  const [temperature, setTemperature] = useState({});
+  useEffect(() => {
+    async function fetchData() {
+      // here to get the city
+      const response = await GetTemperature("Haifa");
+      console.log(response);
+      setTemperature({ ...response });
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <div
@@ -38,8 +48,11 @@ function MainPage() {
         </div>
         <div>
           <Row justify="start">
-            <Col span={14}>
-              <h1 className="main-heading"></h1>
+            <Col span={2}>
+              <h1 className="temp" style={{}}>
+                {" "}
+                Temperature: {temperature.city} <span>{"\u00b0C"}</span>{" "}
+              </h1>
             </Col>
           </Row>
           {/* <Col span={13} offset={10}>
