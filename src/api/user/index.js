@@ -41,4 +41,41 @@ const createUser = async (email, password, firstName, lastName) => {
   return response;
 };
 
-export { login, createUser };
+const getUser = async (token) => {
+  const response = await axios
+    .get(`${config.path}${userAPI}/`, {
+      headers: {
+        Authorization: `Berear ${token}`,
+      },
+    })
+    .then(async (response) => {
+      console.log("🚀 ~ file: user.js:14 ~ .then ~ response:", response.data);
+      return response.data;
+    })
+    .catch(async (error) => {
+      console.log("🚀 ~ file: user.js:17 ~ login ~ error:", error);
+      return error.response.data;
+    });
+  return response;
+};
+
+const updateUser = async (body, token) => {
+  console.log("🚀 ~ file: index.js:63 ~ updateUser ~ body:", body);
+  const response = await axios
+    .post(`${config.path}${userAPI}/update`, body, {
+      headers: {
+        Authorization: `Berear ${token}`,
+      },
+    })
+    .then(async (response) => {
+      console.log("🚀 ~ file: user.js:14 ~ .then ~ response:", response.data);
+      return response.data;
+    })
+    .catch(async (error) => {
+      console.log("🚀 ~ file: user.js:17 ~ login ~ error:", error);
+      return error.response.data;
+    });
+  return response;
+};
+
+export { login, createUser, getUser, updateUser };

@@ -2,6 +2,7 @@ import { Layout, Menu, Typography, Row, Col } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { NavLink, Outlet } from "react-router-dom";
 import {
+  DotChartOutlined,
   UploadOutlined,
   UserOutlined,
   VideoCameraOutlined,
@@ -33,17 +34,17 @@ export default function AppLayout() {
             items={[
               {
                 key: "1",
+                icon: <VideoCameraOutlined />,
+                label: <NavLink to={"/MainPage"}>Greta</NavLink>,
+              },
+              {
+                key: "2",
                 icon: <UserOutlined />,
                 label: <NavLink to={"/profile"}>Profile</NavLink>,
               },
               {
-                key: "2",
-                icon: <VideoCameraOutlined />,
-                label: <NavLink to={"/MainPage"}>Main page</NavLink>,
-              },
-              {
                 key: "3",
-                icon: <UploadOutlined />,
+                icon: <DotChartOutlined />,
                 label: <NavLink to={"/ConfigPage"}>Configuration</NavLink>,
               },
               {
