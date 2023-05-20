@@ -9,11 +9,11 @@ const GetConfig = async (token) => {
         Authorization: `Berear ${token}`,
       },
     })
-
     .then((response) => {
-      console.log("responseee", response);
       return response.data;
     });
+  console.log("🚀 get Success", response);
+
   return response;
 };
 
