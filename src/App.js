@@ -12,6 +12,7 @@ import MainPage from "./pages/MainPage";
 import ConfigPage from "./pages/ConfigPage";
 import RegisterPage from "./pages/Register";
 import AppLayout from "./components/AppLayout";
+import ProfilePage from "./pages/Profile";
 
 function App() {
   const { token, setToken } = useToken();
@@ -44,6 +45,14 @@ function App() {
             </AuthenticatedRoute>
           ),
         },
+        {
+          path: "/profile",
+          element: (
+            <AuthenticatedRoute>
+              <ProfilePage />
+            </AuthenticatedRoute>
+          ),
+        },
       ],
     },
   ]);
@@ -51,7 +60,7 @@ function App() {
   return (
     <div className="App">
       {/* <header className="App-header"> */}
-        <RouterProvider router={router} />
+      <RouterProvider router={router} />
       {/* </header> */}
     </div>
   );
