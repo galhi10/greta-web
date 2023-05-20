@@ -9,10 +9,6 @@ const DemoBox = (props) => (
 );
 
 import "./index.css";
-import backgroundImage from "./MainPagePic.jpg";
-import backgroundImage2 from "./logo.jpg";
-import backgroundImage3 from "./watering.jpg";
-import backgroundImage4 from "./greenLoan.jpg";
 import backgroundImage5 from "./tree.jpg";
 
 let currentHour = new Date().getTime();
