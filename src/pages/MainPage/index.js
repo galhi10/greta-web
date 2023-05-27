@@ -11,11 +11,15 @@ import "./index.css";
 import { useEffect } from "react";
 import backgroundImage5 from "./tree.jpg";
 import { GetTemperature } from "../../api/weather";
+import useToken from "../../hooks/useToken";
 
+// to complete
 function MainPage() {
   const [temperature, setTemperature] = useState({});
   useEffect(() => {
     async function fetchData() {
+      // const { token } = useToken();
+      // const responeCity = await GetCity();
       // here to get the city
       const response = await GetTemperature("Haifa");
       console.log(response);
