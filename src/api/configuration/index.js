@@ -18,6 +18,8 @@ const GetConfig = async (token) => {
 };
 
 const SetConfig = async (
+  country,
+  city,
   grass,
   mode,
   size,
@@ -28,9 +30,18 @@ const SetConfig = async (
   token
 ) => {
   const body = {
-    config: { grass, mode, size, ground, location, liters_per_minute, light },
+    config: {
+      country,
+      city,
+      grass,
+      mode,
+      size,
+      ground,
+      location,
+      liters_per_minute,
+      light,
+    },
   };
-  console.log("body amir", body);
   const response = await axios
     .post(`${config.path}${configAPI}/setConfig`, body, {
       headers: {
