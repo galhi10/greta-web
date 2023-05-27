@@ -7,7 +7,7 @@ import { GetConfig } from "../../api/configuration";
 import useToken from "../../hooks/useToken";
 import config from "../../config";
 import { useEffect } from "react";
-import { getCities } from "../../api/weather";
+import { getCities, getCountries } from "../../api/weather";
 
 const formItemLayout = {
   labelCol: {
@@ -22,6 +22,8 @@ const ConfigPage = () => {
   const [message, setMessage] = useState("");
   const [config, setConfig] = useState({});
   const [cities, setCities] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState([]);
+  const [countries, setCountries] = useState([]);
   const [mode, setMode] = useState(undefined);
 
   const onChange = (e) => {
@@ -29,7 +31,10 @@ const ConfigPage = () => {
   };
   const { token } = useToken();
   const onFinish = async (values) => {
+    console.log("🚀 ~ file: index.js:34 ~ onFinish ~ values:", values);
     const response = await SetConfig(
+      values.Country,
+      values.City,
       values.GrassType,
       values.Mode,
       values.LoanSize,
@@ -57,15 +62,38 @@ const ConfigPage = () => {
 
   useEffect(() => {
     // make it as default values, so we'll be able to change only one field to submit
-    async function fetchCities() {
-      const fetchedCities = await getCities();
+    async function fetchCountries() {
+      const fetchedCountries = await getCountries(token);
+      console.log(
+        "🚀 ~ file: index.js:63 ~ fetchCountries ~ response2:",
+        fetchedCountries
+      );
+      const countries = [];
+      for (const country of fetchedCountries) {
+        console.log(
+          "🚀 ~ file: index.js:69 ~ fetchCountries ~ country:",
+          country
+        );
+        countries.push({
+          value: country,
+          label: country == "IL" ? "Israel" : "Island",
+        });
+      }
+      setCountries(countries);
+    }
+    fetchCountries();
+  }, []);
+
+  useEffect(() => {
+    // make it as default values, so we'll be able to change only one field to submit
+    async function fetchCities(selectedCountry) {
+      const fetchedCities = await getCities(selectedCountry);
 
       function onlyUnique(value, index, array) {
         return array.indexOf(value) === index;
       }
 
-      // usage example:
-      var uniqueCities = fetchedCities.filter(onlyUnique);
+      const uniqueCities = fetchedCities.filter(onlyUnique);
       const cities = [];
       for (const city of uniqueCities) {
         cities.push({
@@ -76,8 +104,13 @@ const ConfigPage = () => {
 
       setCities(cities);
     }
-    fetchCities();
-  }, []);
+    fetchCities(selectedCountry);
+  }, [selectedCountry]);
+
+  const onCountrySelection = (value) => {
+    console.log("🚀 ~ file: index.js:107 ~ onCountrySelection ~ value:", value);
+    setSelectedCountry(value);
+  };
 
   return (
     <Card className="card">
@@ -85,19 +118,38 @@ const ConfigPage = () => {
         <h1 className="main-heading">System Configuration</h1>
 
         <Form.Item
-          name="Region"
-          label="Region"
+          name="Country"
+          label="Country"
           rules={[
             {
               required: true,
-              message: "Please select your region!",
+              message: "Please select your country!",
             },
           ]}
         >
           <Select
             style={{ width: "300px" }}
-            placeholder={config.location}
-            // defaultValue={config.location}
+            placeholder={config.country}
+            showSearch
+            options={countries}
+            clearIcon
+            onChange={onCountrySelection}
+          ></Select>
+        </Form.Item>
+
+        <Form.Item
+          name="City"
+          label="City"
+          rules={[
+            {
+              required: true,
+              message: "Please select your city!",
+            },
+          ]}
+        >
+          <Select
+            style={{ width: "300px" }}
+            placeholder={config.city}
             showSearch
             options={cities}
             clearIcon
@@ -198,21 +250,14 @@ const ConfigPage = () => {
             },
           ]}
         >
-          {config.mode ? (
-            <Radio.Group
-              onChange={onChange}
-              defaultValue={config.mode}
-              value={mode}
-            >
-              <Radio value={"Automatic"}>Automatic</Radio>
-              <Radio value={"Manual"}>Manual</Radio>
-            </Radio.Group>
-          ) : (
-            <Radio.Group onChange={onChange} value={mode}>
-              <Radio value={"Automatic"}>Automatic</Radio>
-              <Radio value={"Manual"}>Manual</Radio>
-            </Radio.Group>
-          )}
+          <Radio.Group
+            onChange={onChange}
+            defaultValue={"Automatic"}
+            value={mode}
+          >
+            <Radio value={"Automatic"}>Automatic</Radio>
+            <Radio value={"Manual"}>Manual</Radio>
+          </Radio.Group>
         </Form.Item>
 
         <Form.Item

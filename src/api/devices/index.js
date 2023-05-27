@@ -21,6 +21,24 @@ const setDevice = async (token, device) => {
   return response;
 };
 
+const createDevice = async (token, device) => {
+  const response = await axios
+    .put(`${config.path}${devicesAPI}/create`, device, {
+      headers: {
+        Authorization: `Berear ${token}`,
+      },
+    })
+    .then(async (response) => {
+      console.log("🚀 ~ file: user.js:14 ~ .then ~ response:", response);
+      return response.data.data;
+    })
+    .catch(async (error) => {
+      console.log("🚀 ~ file: user.js:17 ~ login ~ error:", error);
+      return error.response.data;
+    });
+  return response;
+};
+
 const getDevices = async (token) => {
   const response = await axios
     .get(`${config.path}${devicesAPI}/getDevicesId`, {
@@ -61,4 +79,4 @@ const deleteDevice = async (token, id) => {
   return response;
 };
 
-export { setDevice, getDevices, deleteDevice };
+export { setDevice, getDevices, deleteDevice, createDevice };

@@ -19,7 +19,12 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useToken from "../../hooks/useToken";
-import { deleteDevice, getDevices, setDevice } from "../../api/devices";
+import {
+  createDevice,
+  deleteDevice,
+  getDevices,
+  setDevice,
+} from "../../api/devices";
 
 const { Title, Text } = Typography;
 
@@ -97,10 +102,17 @@ const ProfilePage = () => {
   }, []);
 
   const onDeviceFinish = useCallback(async (values) => {
-    // insert here get devices
-    const result = await setDevice({});
+    console.log("🚀 ~ file: index.js:100 ~ onDeviceFinish ~ values:", values);
+    const result = await createDevice(token, {
+      sensor: {
+        id: values.id,
+        location: values.location,
+        model: values.device_name,
+      },
+    });
     console.log("🚀 ~ file: index.js:49 ~ onFinish ~ result:", result);
 
+    await getDevicesData();
     setIsDeviceModelOpen(false);
   }, []);
 
@@ -139,7 +151,7 @@ const ProfilePage = () => {
               <Modal
                 title="Update your profile:"
                 open={isProfileModalOpen}
-                onOk={onProfileFinish}
+                // onOk={onProfileFinish}
                 onCancel={handleProfileCancel}
                 okButtonProps={{
                   form: "updateForm",
@@ -206,7 +218,7 @@ const ProfilePage = () => {
               <Modal
                 title="Add new device"
                 open={isDeviceModalOpen}
-                onOk={onDeviceFinish}
+                // onOk={onDeviceFinish}
                 onCancel={handleDeviceCancel}
                 okButtonProps={{
                   form: "deviceForm",
@@ -230,7 +242,6 @@ const ProfilePage = () => {
                   <Form.Item name="location">
                     <Input
                       prefix={<LockOutlined className="site-form-item-icon" />}
-                      type="password"
                       placeholder="Location"
                     />
                   </Form.Item>

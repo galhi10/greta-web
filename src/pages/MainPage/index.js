@@ -28,7 +28,7 @@ function MainPage() {
 
   useEffect(() => {
     async function fetchTemp() {
-      const temp = await GetTemperature(config.location);
+      const temp = await GetTemperature(config.city);
       setTemperature(temp);
     }
     fetchTemp();
@@ -61,7 +61,7 @@ function MainPage() {
             <Row>
               <Col style={{ paddingLeft: "80px" }} span={2}>
                 <h1 className="temp" style={{}}>
-                  Temperature: {temperature.toFixed(1)}
+                  Temperature: {temperature?.toFixed(1)}
                   <span>{"\u00b0C"}</span>
                 </h1>
               </Col>
