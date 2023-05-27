@@ -3,30 +3,36 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { login } from "../../api/user";
 import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
 import Card from "../../components/antd/card";
-const DemoBox = (props) => (
-  <p className={`height-${props.value}`}>{props.children}</p>
-);
 const CITY = "Haifa";
 import "./index.css";
 import { useEffect } from "react";
 import backgroundImage5 from "./tree.jpg";
 import { GetTemperature } from "../../api/weather";
 import useToken from "../../hooks/useToken";
+import { GetConfig } from "../../api/configuration";
 
 // to complete
 function MainPage() {
-  const [temperature, setTemperature] = useState({});
+  const [temperature, setTemperature] = useState(undefined);
+  const [config, setConfig] = useState({});
+  const { token } = useToken();
+
   useEffect(() => {
+    // make it as default values, so we'll be able to change only one field to submit
     async function fetchData() {
-      // const { token } = useToken();
-      // const responeCity = await GetCity();
-      // here to get the city
-      const response = await GetTemperature("Haifa");
-      console.log(response);
-      setTemperature({ ...response });
+      const response = await GetConfig(token);
+      setConfig({ ...response });
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    async function fetchTemp() {
+      const temp = await GetTemperature(config.location);
+      setTemperature(temp);
+    }
+    fetchTemp();
+  }, [config]);
 
   return (
     <>
@@ -51,22 +57,25 @@ function MainPage() {
           </div>
         </div>
         <div>
-          <Row justify="start">
-            <Col span={2}>
-              <h1 className="temp" style={{}}>
-                {" "}
-                Temperature: {temperature.city} <span>{"\u00b0C"}</span>{" "}
-              </h1>
-            </Col>
-          </Row>
-          {/* <Col span={13} offset={10}>
-            {/* <h1 className="About">
+          {temperature && (
+            <Row>
+              <Col style={{ paddingLeft: "80px" }} span={2}>
+                <h1 className="temp" style={{}}>
+                  Temperature: {temperature.toFixed(1)}
+                  <span>{"\u00b0C"}</span>
+                </h1>
+              </Col>
+            </Row>
+          )}
+          {/* 
+          <Col span={13} offset={10}>
+            <h1 className="About">
               Water is a precious resource that must be conserved. Greta
               Irrigation Solutions using a clever approach to watering, which
               allows us to save a great amount of water, and also makes sure you
               can give your plants the exact amount of water they need.
-            </h1> */}
-          {/* </Col> */}
+            </h1>
+          </Col> */}
         </div>
       </div>
     </>

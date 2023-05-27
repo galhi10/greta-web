@@ -13,6 +13,7 @@ import ConfigPage from "./pages/ConfigPage";
 import RegisterPage from "./pages/Register";
 import AppLayout from "./components/AppLayout";
 import ProfilePage from "./pages/Profile";
+import DashboardPage from "./pages/Dashboard";
 
 function App() {
   const { token, setToken } = useToken();
@@ -34,6 +35,14 @@ function App() {
           element: (
             <AuthenticatedRoute>
               <MainPage />
+            </AuthenticatedRoute>
+          ),
+        },
+        {
+          path: "/dashboard",
+          element: (
+            <AuthenticatedRoute>
+              <DashboardPage />
             </AuthenticatedRoute>
           ),
         },

@@ -11,6 +11,7 @@ import {
   Typography,
   Modal,
   Divider,
+  message,
 } from "antd";
 import Card from "../../components/antd/card";
 
@@ -18,7 +19,7 @@ import "./index.css";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useToken from "../../hooks/useToken";
-import { getDevices, setDevice } from "../../api/devices";
+import { deleteDevice, getDevices, setDevice } from "../../api/devices";
 
 const { Title, Text } = Typography;
 
@@ -26,11 +27,18 @@ const ProfilePage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(undefined);
   const [devices, setDevices] = useState([]);
-  console.log("🚀 ~ file: index.js:21 ~ ProfilePage ~ devices:", devices);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isProfileModalOpen, setIsProfileModelOpen] = useState(false);
   const [isDeviceModalOpen, setIsDeviceModelOpen] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const removeDeviceMessage = (id) => {
+    messageApi.open({
+      type: "success",
+      content: `Device ${id} removed successfully`,
+    });
+  };
 
   const { token } = useToken();
 
@@ -51,6 +59,13 @@ const ProfilePage = () => {
     } else {
       setDevices([]);
     }
+  };
+
+  const removeDevice = async (id) => {
+    console.log("🚀 ~ file: index.js:57 ~ removeDevice ~ id:", id);
+    await deleteDevice(token, id);
+    removeDeviceMessage(id);
+    await getDevicesData();
   };
 
   useEffect(() => {
@@ -75,20 +90,13 @@ const ProfilePage = () => {
   };
 
   const onProfileFinish = useCallback(async (values) => {
-    // do your staff with values
-    console.log("🚀 ~ file: index.js:40 ~ onFinish ~ values:", values);
-
-    const result = await updateUser(values, token);
-    console.log("🚀 ~ file: index.js:49 ~ onFinish ~ result:", result);
+    await updateUser(values, token);
     getUserData();
 
     setIsProfileModelOpen(false);
   }, []);
 
   const onDeviceFinish = useCallback(async (values) => {
-    // do your staff with values
-    console.log("🚀 ~ file: index.js:40 ~ onFinish ~ values:", values);
-
     // insert here get devices
     const result = await setDevice({});
     console.log("🚀 ~ file: index.js:49 ~ onFinish ~ result:", result);
@@ -101,6 +109,7 @@ const ProfilePage = () => {
   };
   return user ? (
     <Row>
+      {contextHolder}
       <Col span={24}>
         <Card title={<Title level={2}>Profile</Title>} bordered={false}>
           <Row style={{ paddingTop: "10px" }}>
@@ -189,42 +198,7 @@ const ProfilePage = () => {
       </Col>
       <Col span={24}>
         <Card title={<Title level={2}>Devices</Title>} bordered={false}>
-          {devices.map((device) => (
-            <>
-              <Row style={{ paddingTop: "10px" }}>
-                <Col span={2}>
-                  <Text keyboard>{device.sensor.model}</Text>
-                </Col>
-              </Row>
-              <Row style={{ paddingTop: "10px" }}>
-                <Col span={2}>Identifier:</Col>
-                <Col span={4}>
-                  <Input disabled defaultValue={device._id} />
-                </Col>
-              </Row>
-              <Row style={{ paddingTop: "10px" }}>
-                <Col span={2}>Location:</Col>
-                <Col span={4}>
-                  <Input disabled defaultValue={device.sensor.location} />
-                </Col>
-              </Row>
-              <Row style={{ paddingTop: "10px" }}>
-                <Col span={2}>Humidity status:</Col>
-                <Col span={4}>
-                  <Input disabled defaultValue={device.humidity} />
-                </Col>
-              </Row>
-              <Row style={{ paddingTop: "10px" }}>
-                <Col span={2}>Added at: </Col>
-                <Col span={4}>
-                  <Input disabled defaultValue={device.createdAt} />
-                </Col>
-              </Row>
-              <Divider />
-            </>
-          ))}
-
-          <Row style={{ paddingTop: "20px" }}>
+          <Row style={{ paddingTop: "20px", paddingBottom: "20px" }}>
             <Col>
               <Button type="primary" onClick={showDeviceModal}>
                 Add new device
@@ -241,7 +215,7 @@ const ProfilePage = () => {
                 }}
               >
                 <Form
-                  name="update user"
+                  name="update device"
                   id="deviceForm"
                   initialValues={{ remember: true }}
                   onFinish={onDeviceFinish}
@@ -271,13 +245,63 @@ const ProfilePage = () => {
               </Modal>
             </Col>
           </Row>
+
+          {devices.map((device) => (
+            <>
+              <Row style={{ paddingTop: "10px" }}>
+                <Col span={2}>
+                  <Text keyboard>{device.sensor.model}</Text>
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Identifier:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device._id} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Location:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device.sensor.location} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Humidity:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device.humidity} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Added at: </Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device.createdAt} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "15px", gap: "5px" }}>
+                <Col>
+                  <Button type="primary">Update device</Button>
+                </Col>
+                <Col>
+                  <Button
+                    onClick={async () => {
+                      await removeDevice(device._id);
+                    }}
+                    type="primary"
+                  >
+                    Remove device
+                  </Button>
+                </Col>
+              </Row>
+              <Divider />
+            </>
+          ))}
         </Card>
       </Col>
     </Row>
   ) : (
     <Row>
       <Col span={24}>
-        <Title>Couldn't find user's data, Please try to refresh the page</Title>
+        <Title>Loading...</Title>
       </Col>
     </Row>
   );
