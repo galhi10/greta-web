@@ -1,21 +1,32 @@
 import React, { useCallback, useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 
-import { createUser, getUser, updateUser } from "../../api/user";
-import { Button, Col, Form, Input, Row, Typography, Alert, Modal } from "antd";
+import { getUser, updateUser } from "../../api/user";
+import {
+  Button,
+  Col,
+  Form,
+  Input,
+  Row,
+  Typography,
+  Modal,
+  Divider,
+} from "antd";
 import Card from "../../components/antd/card";
 
 import "./index.css";
-import { Navigate, useNavigate } from "react-router-dom";
-import { delay } from "../../utils";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useToken from "../../hooks/useToken";
+import { getDevices, setDevice } from "../../api/devices";
 
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 const ProfilePage = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(undefined);
+  const [devices, setDevices] = useState([]);
+  console.log("🚀 ~ file: index.js:21 ~ ProfilePage ~ devices:", devices);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [isProfileModalOpen, setIsProfileModelOpen] = useState(false);
@@ -32,8 +43,19 @@ const ProfilePage = () => {
     }
   };
 
+  const getDevicesData = async () => {
+    const devices = await getDevices(token);
+    console.log("🚀 ~ file: index.js:39 ~ getDevicesData ~ devices:", devices);
+    if (devices.length) {
+      setDevices(devices);
+    } else {
+      setDevices([]);
+    }
+  };
+
   useEffect(() => {
     getUserData();
+    getDevicesData();
   }, []);
 
   const showProfileModal = () => {
@@ -63,13 +85,13 @@ const ProfilePage = () => {
     setIsProfileModelOpen(false);
   }, []);
 
-  const onDeviceFinish = useCallback((values) => {
+  const onDeviceFinish = useCallback(async (values) => {
     // do your staff with values
     console.log("🚀 ~ file: index.js:40 ~ onFinish ~ values:", values);
 
     // insert here get devices
-    // const result = await .............
-    // console.log("🚀 ~ file: index.js:49 ~ onFinish ~ result:", result);
+    const result = await setDevice({});
+    console.log("🚀 ~ file: index.js:49 ~ onFinish ~ result:", result);
 
     setIsDeviceModelOpen(false);
   }, []);
@@ -163,6 +185,44 @@ const ProfilePage = () => {
               </Modal>
             </Col>
           </Row>
+        </Card>
+      </Col>
+      <Col span={24}>
+        <Card title={<Title level={2}>Devices</Title>} bordered={false}>
+          {devices.map((device) => (
+            <>
+              <Row style={{ paddingTop: "10px" }}>
+                <Col span={2}>
+                  <Text keyboard>{device.sensor.model}</Text>
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px" }}>
+                <Col span={2}>Identifier:</Col>
+                <Col span={4}>
+                  <Input disabled defaultValue={device._id} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px" }}>
+                <Col span={2}>Location:</Col>
+                <Col span={4}>
+                  <Input disabled defaultValue={device.sensor.location} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px" }}>
+                <Col span={2}>Humidity status:</Col>
+                <Col span={4}>
+                  <Input disabled defaultValue={device.humidity} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px" }}>
+                <Col span={2}>Added at: </Col>
+                <Col span={4}>
+                  <Input disabled defaultValue={device.createdAt} />
+                </Col>
+              </Row>
+              <Divider />
+            </>
+          ))}
 
           <Row style={{ paddingTop: "20px" }}>
             <Col>
