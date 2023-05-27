@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, Form } from "antd";
+import { AutoComplete, Button, Form } from "antd";
 import "./index.css";
 import { Select, Space, Input, InputNumber, Radio, Card } from "antd";
 import { SetConfig } from "../../api/configuration";
@@ -7,7 +7,7 @@ import { GetConfig } from "../../api/configuration";
 import useToken from "../../hooks/useToken";
 import config from "../../config";
 import { useEffect } from "react";
-const configAPI = "Config";
+import { getCities } from "../../api/weather";
 
 const formItemLayout = {
   labelCol: {
@@ -21,10 +21,11 @@ const formItemLayout = {
 const ConfigPage = () => {
   const [message, setMessage] = useState("");
   const [config, setConfig] = useState({});
-  const [value, setValue] = useState("Automatic");
+  const [cities, setCities] = useState([]);
+  const [mode, setMode] = useState(undefined);
+
   const onChange = (e) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
+    setMode(e.target.value);
   };
   const { token } = useToken();
   const onFinish = async (values) => {
@@ -38,7 +39,6 @@ const ConfigPage = () => {
       values.LightCondition,
       token
     );
-    console.log("blabla", response);
     if (response) {
       setMessage("successfully updated");
     } else {
@@ -53,6 +53,30 @@ const ConfigPage = () => {
       setConfig({ ...response2 });
     }
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    // make it as default values, so we'll be able to change only one field to submit
+    async function fetchCities() {
+      const fetchedCities = await getCities();
+
+      function onlyUnique(value, index, array) {
+        return array.indexOf(value) === index;
+      }
+
+      // usage example:
+      var uniqueCities = fetchedCities.filter(onlyUnique);
+      const cities = [];
+      for (const city of uniqueCities) {
+        cities.push({
+          value: city,
+          label: city,
+        });
+      }
+
+      setCities(cities);
+    }
+    fetchCities();
   }, []);
 
   return (
@@ -73,25 +97,10 @@ const ConfigPage = () => {
           <Select
             style={{ width: "300px" }}
             placeholder={config.location}
-            defaultValue={config.location}
-            options={[
-              {
-                value: "The Mountain Area",
-                label: "The Mountain Area",
-              },
-              {
-                value: "The Coastal Plain",
-                label: "The Coastal Plain",
-              },
-              {
-                value: "Negev and the Vallies",
-                label: "Negev and the Vallies",
-              },
-              {
-                value: "Eilat and the Arava",
-                label: "Eilat and the Arava",
-              },
-            ]}
+            // defaultValue={config.location}
+            showSearch
+            options={cities}
+            clearIcon
           ></Select>
         </Form.Item>
 
@@ -175,7 +184,7 @@ const ConfigPage = () => {
           <InputNumber
             style={{ width: "300px" }}
             min={1}
-            placeholder="to insert"
+            placeholder={config.liters_per_minute}
           />
         </Form.Item>
 
@@ -189,10 +198,21 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Radio.Group onChange={onChange} value={value}>
-            <Radio value="Automatic">Automatic</Radio>
-            <Radio value="Manual">Manual</Radio>
-          </Radio.Group>
+          {config.mode ? (
+            <Radio.Group
+              onChange={onChange}
+              defaultValue={config.mode}
+              value={mode}
+            >
+              <Radio value={"Automatic"}>Automatic</Radio>
+              <Radio value={"Manual"}>Manual</Radio>
+            </Radio.Group>
+          ) : (
+            <Radio.Group onChange={onChange} value={mode}>
+              <Radio value={"Automatic"}>Automatic</Radio>
+              <Radio value={"Manual"}>Manual</Radio>
+            </Radio.Group>
+          )}
         </Form.Item>
 
         <Form.Item

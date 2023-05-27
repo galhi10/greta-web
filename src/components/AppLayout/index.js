@@ -2,6 +2,7 @@ import { Layout, Menu, Typography, Row, Col } from "antd";
 import Sider from "antd/es/layout/Sider";
 import { NavLink, Outlet } from "react-router-dom";
 import {
+  DashboardOutlined,
   DotChartOutlined,
   UploadOutlined,
   UserOutlined,
@@ -39,16 +40,21 @@ export default function AppLayout() {
               },
               {
                 key: "2",
+                icon: <DashboardOutlined />,
+                label: <NavLink to={"/dashboard"}>Dashboard</NavLink>,
+              },
+              {
+                key: "3",
                 icon: <UserOutlined />,
                 label: <NavLink to={"/profile"}>Profile</NavLink>,
               },
               {
-                key: "3",
+                key: "4",
                 icon: <DotChartOutlined />,
                 label: <NavLink to={"/ConfigPage"}>Configuration</NavLink>,
               },
               {
-                key: "4",
+                key: "5",
                 icon: <UploadOutlined />,
                 label: <NavLink to={"/"}>Logout</NavLink>,
               },

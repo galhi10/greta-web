@@ -4,19 +4,36 @@ const weatherAPI = "weatherApi";
 
 // to complete
 const GetTemperature = async (city) => {
-  const body = {
-    config: { city: "Haifa" },
-  };
-  console.log("city is:", response);
+  console.log("city is:", city);
   const response = await axios
-    .get(`${config.path}${weatherAPI}/getTemp`, body)
+    .post(`${config.path}${weatherAPI}/getTemp`, {
+      city,
+    })
     .then((response) => {
       console.log("🚀 get Success", response);
       return response.data;
+    })
+    .catch(async (error) => {
+      console.log("🚀 Response error", error);
+      return error.response.data;
     });
-  //   console.log("🚀 get Success", response);
 
   return response;
 };
 
-export { GetTemperature };
+const getCities = async () => {
+  const response = await axios
+    .get(`${config.path}${weatherAPI}/getCitiesList`)
+    .then((response) => {
+      console.log("🚀 get Success", response);
+      return response.data;
+    })
+    .catch(async (error) => {
+      console.log("🚀 Response error", error);
+      return error.response.data;
+    });
+
+  return response;
+};
+
+export { GetTemperature, getCities };
