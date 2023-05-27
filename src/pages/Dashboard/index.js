@@ -25,7 +25,7 @@ import useToken from "../../hooks/useToken";
 import { deleteDevice, getDevices, setDevice } from "../../api/devices";
 import { GetConfig } from "../../api/configuration";
 import { GetTemperature, getHumidity } from "../../api/weather";
-import { getSchedule } from "../../api/irrigation";
+import { getSchedule, runAlgo } from "../../api/irrigation";
 import { BsDropletFill, BsDropletHalf, BsDroplet } from "react-icons/bs";
 
 const { Title, Text } = Typography;
@@ -194,6 +194,20 @@ const DashboardPage = () => {
           <Row>
             <Col span={24}>
               <Table dataSource={tableData} columns={tableColumns} />
+            </Col>
+          </Row>
+
+          <Row>
+            <Col span={24}>
+              <Button
+                type="primary"
+                onClick={async () => {
+                  console.log("haha", token);
+                  await runAlgo(token);
+                }}
+              >
+                Run algorithm
+              </Button>
             </Col>
           </Row>
         </Card>

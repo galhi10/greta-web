@@ -21,4 +21,27 @@ const getSchedule = async (token) => {
   return response;
 };
 
-export { getSchedule };
+const runAlgo = async (token) => {
+  const response = await axios
+    .post(
+      `${config.path}${irrigationAPI}/startAlgo`,
+      {},
+      {
+        headers: {
+          Authorization: `Berear ${token}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log("🚀 get Success", response);
+      return response.data;
+    })
+    .catch(async (error) => {
+      console.log("🚀 Response error", error);
+      return error.response.data;
+    });
+
+  return response;
+};
+
+export { getSchedule, runAlgo };
