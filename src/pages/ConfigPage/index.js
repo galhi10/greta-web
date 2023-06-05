@@ -183,9 +183,11 @@ const ConfigPage = () => {
           ]}
         >
           <Select style={{ width: "300px" }} placeholder={config.grass}>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
+            <option value="Ryegrass">Ryegrass</option>
+            <option value="Floratam">Floratam</option>
+            <option value="Fine Fescue">Fine Fescue</option>
+            <option value="Bluegrass">Bluegrass</option>
+            <option value="Bentgrass">Bentgrass</option>
           </Select>
         </Form.Item>
 
