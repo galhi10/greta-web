@@ -11,6 +11,7 @@ import {
 import "./index.css";
 import { useEffect, useRef, useState } from "react";
 import { GetConfig } from "../../api/configuration";
+import useToken from "../../hooks/useToken";
 const { Content } = Layout;
 
 function isEmpty(obj) {
@@ -28,6 +29,9 @@ export default function AppLayout() {
   const ref3 = useRef(null);
   const [open, setOpen] = useState(false);
   const [config, setConfig] = useState({});
+  const [checkTour, setCheckTour] = useState(false);
+  const { token } = useToken();
+
   console.log("🚀 ~ file: index.js:20 ~ AppLayout ~ config:", config);
   const navigate = useNavigate();
 
@@ -35,6 +39,7 @@ export default function AppLayout() {
     // make it as default values, so we'll be able to change only one field to submit
     async function fetchData() {
       const response2 = await GetConfig(token);
+      setCheckTour(true);
       setConfig({ ...response2 });
     }
     fetchData();
@@ -45,7 +50,13 @@ export default function AppLayout() {
       "🚀 ~ file: index.js:45 ~ useEffect ~ window.location.href:",
       window.location.href
     );
-    if (isEmpty(config) && window.location.href.includes("MainPage")) {
+    if (
+      checkTour &&
+      config?.city == "" &&
+      config?.country == "" &&
+      config?.mode == "" &&
+      window.location.href.includes("MainPage")
+    ) {
       setOpen(true);
     }
   }, [config]);
@@ -127,7 +138,11 @@ export default function AppLayout() {
               {
                 key: "5",
                 icon: <UploadOutlined />,
-                label: <NavLink to={"/"}>Logout</NavLink>,
+                label: "Logout",
+                onClick: () => {
+                  localStorage.removeItem("token");
+                  window.location.reload();
+                },
               },
             ]}
           />

@@ -1,6 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { TiWeatherSunny, TiWeatherPartlySunny } from "react-icons/ti";
+import { RiPlantLine } from "react-icons/ri";
+import { AiOutlineAlert } from "react-icons/ai";
 
 import { getUser, updateUser } from "../../api/user";
 import {
@@ -37,6 +39,8 @@ const DashboardPage = () => {
   const [tableColumns, setTableColumns] = useState([]);
   const [tableData, setTableData] = useState([]);
   const [config, setConfig] = useState({});
+  const [irrigation, setIrrigation] = useState(false);
+  console.log("🚀 ~ file: index.js:40 ~ DashboardPage ~ config:", config);
   const { token } = useToken();
 
   useEffect(() => {
@@ -72,6 +76,17 @@ const DashboardPage = () => {
           key: index,
           ...schedule[index],
         });
+      }
+
+      for (const row of data) {
+        console.log("🚀 ~ file: index.js:81 ~ fetchSchedule ~ row:", row);
+        if (row.status === "Active") {
+          setIrrigation(true);
+        }
+        row.start_humidity += "%";
+        row.end_humidity += "%";
+        row.irrigation_time += " seconds";
+        row.irrigation_volume += " liter";
       }
       console.log("🚀 ~ file: index.js:67 ~ fetchSchedule ~ data:", data);
 
@@ -117,7 +132,7 @@ const DashboardPage = () => {
     <Row>
       <Col span={24}>
         <Card title={<Title level={2}>Dashboard</Title>} bordered={false}>
-          <Row style={{ paddingBottom: "20px" }}>
+          <Row>
             <Col span={8}>
               <Title>Location stats: </Title>
             </Col>
@@ -129,7 +144,7 @@ const DashboardPage = () => {
                   <TiWeatherPartlySunny size={"2.5em"} />
                 )}
               </Col>
-              {humidity && (
+              {temperature && (
                 <Col>
                   Temperature: {temperature?.toFixed(1)}{" "}
                   <span>{"\u00b0C"}</span>
@@ -146,50 +161,93 @@ const DashboardPage = () => {
                   <BsDropletFill size={"2.5em"} />
                 )}
               </Col>
-              {humidity && <Col>Humidity: {humidity}%</Col>}
+              {humidity && <Col>Air humidity: {humidity}%</Col>}
             </Col>
+            <Col style={{ paddingTop: "36px" }} span={4}>
+              <Col>
+                <MdOutlineNotListedLocation size={"2.5em"} />
+              </Col>
+              {config?.city && config?.country && (
+                <Col>
+                  Location: {config.country}, {config.city}
+                </Col>
+              )}
+            </Col>
+            <Divider />
           </Row>
 
-          <Row style={{ paddingBottom: "50px" }}>
+          <Row>
             <Col span={8}>
               <Title>Devices: </Title>
             </Col>
-            {devices.map((device) => (
-              <>
-                <Col style={{ paddingTop: "36px" }} span={4}>
-                  <Col>
-                    <BiChip size={"2.5em"} />
-                  </Col>
-                  Identifier: {device.sensor.id}
-                </Col>
-                <Col style={{ paddingTop: "36px" }} span={4}>
-                  <Col>
-                    {device.humidity <= 30 ? (
-                      <BsDroplet size={"2.5em"} />
-                    ) : device.humidity <= 70 ? (
-                      <BsDropletHalf size={"2.5em"} />
-                    ) : (
-                      <BsDropletFill size={"2.5em"} />
-                    )}
-                  </Col>
-                  {<Col>Humidity: {device.humidity}%</Col>}
-                </Col>
-                <Col style={{ paddingTop: "36px" }} span={4}>
-                  <Col>
-                    <BiChip size={"2.5em"} />
-                  </Col>
-                  Location: {device.sensor.location}
-                </Col>
-
-                <Col style={{ paddingTop: "36px" }} span={4}>
-                  <Col>
-                    <MdOutlineNotListedLocation size={"2.5em"} />
-                  </Col>
-                  Name: {device.sensor.model}
-                </Col>
-              </>
-            ))}
           </Row>
+
+          {devices.map((device, idx) => (
+            <Row>
+              <Col span={8}>
+                <Title
+                  style={{ paddingTop: "45px", paddingLeft: "25px" }}
+                  level={4}
+                >
+                  Device {idx + 1}: {device.sensor.model}{" "}
+                </Title>
+              </Col>
+              <Col style={{ paddingTop: "36px" }} span={4}>
+                <Col>
+                  <BiChip size={"2.5em"} />
+                </Col>
+                Identifier: {device.sensor.id}
+              </Col>
+              <Col style={{ paddingTop: "36px" }} span={4}>
+                <Col>
+                  {device.humidity <= 30 ? (
+                    <BsDroplet size={"2.5em"} />
+                  ) : device.humidity <= 70 ? (
+                    <BsDropletHalf size={"2.5em"} />
+                  ) : (
+                    <BsDropletFill size={"2.5em"} />
+                  )}
+                </Col>
+                {<Col>Ground humidity: {device.humidity}%</Col>}
+              </Col>
+
+              <Col style={{ paddingTop: "36px" }} span={4}>
+                <Col>
+                  <MdOutlineNotListedLocation size={"2.5em"} />
+                </Col>
+                Position: {device.sensor.location}
+              </Col>
+
+              <Divider />
+            </Row>
+          ))}
+
+          {irrigation && (
+            <Row>
+              {/* <Col
+                span={2}
+                style={{
+                  height: "min-content",
+                  paddingTop: "27px",
+                }}
+              >
+                <AiOutlineAlert color="red" size={"4em"} />
+              </Col> */}
+              <Col
+                span={2}
+                style={{
+                  height: "min-content",
+                  paddingTop: "27px",
+                }}
+              >
+                <RiPlantLine className="plantIcon" color="green" size={"4em"} />
+              </Col>
+
+              <Col span={8}>
+                <Title> Irrigation has started! </Title>
+              </Col>
+            </Row>
+          )}
 
           <Row>
             <Col span={24}>
@@ -202,7 +260,6 @@ const DashboardPage = () => {
               <Button
                 type="primary"
                 onClick={async () => {
-                  console.log("haha", token);
                   await runAlgo(token);
                 }}
               >

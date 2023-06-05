@@ -3,7 +3,7 @@ import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { login } from "../../api/user";
 import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
 import Card from "../../components/antd/card";
-const CITY = "Haifa";
+import { getUser, updateUser } from "../../api/user";
 import "./index.css";
 import { useEffect } from "react";
 import backgroundImage5 from "./tree.jpg";
@@ -14,8 +14,21 @@ import { GetConfig } from "../../api/configuration";
 // to complete
 function MainPage() {
   const [temperature, setTemperature] = useState(undefined);
+  const [user, setUser] = useState({});
   const [config, setConfig] = useState({});
   const { token } = useToken();
+
+  useEffect(() => {
+    async function fetchUser() {
+      const user = await getUser(token);
+      console.log("🚀 ~ file: index.js:122 ~ fetchUser ~ user:", user);
+      if (user.ok) {
+        setUser(user.data);
+      }
+    }
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     // make it as default values, so we'll be able to change only one field to submit
@@ -48,14 +61,16 @@ function MainPage() {
           backfaceVisibility: "hidden",
         }}
       >
-        <div class="banner">
-          <div class="banner-content">
-            <h1 class="banner-heading">Welcome to GRETA</h1>
+        <Row>
+          <Col style={{ paddingLeft: "30px" }}>
+            <h1 class="banner-heading">
+              Welcome to GRETA {user?.first_name} {user?.last_name}
+            </h1>
             <p class="banner-description">
               Efficient Water Management for Healthy Plants
             </p>
-          </div>
-        </div>
+          </Col>
+        </Row>
         <div>
           {temperature && (
             <Row>
