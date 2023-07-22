@@ -7,7 +7,7 @@ import { getUser, updateUser } from "../../api/user";
 import "./index.css";
 import { useEffect } from "react";
 import backgroundImage5 from "./tree.jpg";
-import { GetTemperature } from "../../api/weather";
+import { GetTemperature, getWeatherAlert } from "../../api/weather";
 import useToken from "../../hooks/useToken";
 import { GetConfig } from "../../api/configuration";
 
@@ -16,12 +16,12 @@ function MainPage() {
   const [temperature, setTemperature] = useState(undefined);
   const [user, setUser] = useState({});
   const [config, setConfig] = useState({});
+  const [extremeWeather, setExtremeWeather] = useState("");
   const { token } = useToken();
 
   useEffect(() => {
     async function fetchUser() {
       const user = await getUser(token);
-      console.log("🚀 ~ file: index.js:122 ~ fetchUser ~ user:", user);
       if (user.ok) {
         setUser(user.data);
       }
@@ -44,7 +44,16 @@ function MainPage() {
       const temp = await GetTemperature(config.city);
       setTemperature(temp);
     }
+    async function getExtremeWeatherAlert() {
+      if (config.city && config.country) {
+        const result = await getWeatherAlert(config.city, config.country);
+        if (result.extreme) {
+          setExtremeWeather(result.msg);
+        }
+      }
+    }
     fetchTemp();
+    getExtremeWeatherAlert();
   }, [config]);
 
   return (
@@ -82,15 +91,17 @@ function MainPage() {
               </Col>
             </Row>
           )}
-          {/* 
-          <Col span={13} offset={10}>
-            <h1 className="About">
-              Water is a precious resource that must be conserved. Greta
-              Irrigation Solutions using a clever approach to watering, which
-              allows us to save a great amount of water, and also makes sure you
-              can give your plants the exact amount of water they need.
-            </h1>
-          </Col> */}
+        </div>
+        <div>
+          {temperature && (
+            <Row>
+              <Col
+                style={{ paddingLeft: "30px", width: "50px", maxWidth: "20px" }}
+              >
+                <h1 className="extreme">{extremeWeather}</h1>
+              </Col>
+            </Row>
+          )}
         </div>
       </div>
     </>
