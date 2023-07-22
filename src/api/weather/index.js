@@ -21,6 +21,24 @@ const GetTemperature = async (city) => {
   return response;
 };
 
+const getWeatherAlert = async (city, country) => {
+  const response = await axios
+    .post(`${config.path}${weatherAPI}/getWeatherAlert`, {
+      city,
+      country,
+    })
+    .then((response) => {
+      console.log("🚀 get Success", response);
+      return response.data;
+    })
+    .catch(async (error) => {
+      console.log("🚀 Response error", error);
+      return error.response.data;
+    });
+
+  return response;
+};
+
 const getHumidity = async (city) => {
   const response = await axios
     .post(`${config.path}${weatherAPI}/getAirHumidity`, {
@@ -69,4 +87,10 @@ const getCountries = async () => {
 
   return response;
 };
-export { GetTemperature, getCities, getHumidity, getCountries };
+export {
+  GetTemperature,
+  getCities,
+  getHumidity,
+  getCountries,
+  getWeatherAlert,
+};
