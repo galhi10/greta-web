@@ -12,6 +12,10 @@ import {
   Modal,
   Divider,
   message,
+  InputNumber,
+  Select,
+  Radio,
+  Space,
 } from "antd";
 import Card from "../../components/antd/card";
 
@@ -37,6 +41,9 @@ const ProfilePage = () => {
   const [isProfileModalOpen, setIsProfileModelOpen] = useState(false);
   const [isDeviceModalOpen, setIsDeviceModelOpen] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
+  const [deviceMessage, setDeviceMessage] = useState("");
+  const [mode, setMode] = useState(undefined);
+  const [selectedDeviceId, setSelectedDeviceId] = useState(undefined);
 
   const removeDeviceMessage = (id) => {
     messageApi.open({
@@ -101,20 +108,30 @@ const ProfilePage = () => {
     setIsProfileModelOpen(false);
   }, []);
 
-  const onDeviceFinish = useCallback(async (values) => {
-    console.log("🚀 ~ file: index.js:100 ~ onDeviceFinish ~ values:", values);
-    const result = await createDevice(token, {
-      sensor: {
-        id: values.id,
-        location: values.location,
-        model: values.device_name,
+  const onUpdateSensorFinish = async (values) => {
+    const response = await setDevice(token, {
+      _id: selectedDeviceId,
+      config: {
+        id: values.deviceId,
+        mode: values.Mode,
+        name: values.deviceName,
+        grass: values.GrassType,
+        size: values.LoanSize,
+        ground: values.SoilType,
+        liters_per_minute: values.TubeCapacity,
+        light: values.LightCondition,
       },
     });
-    console.log("🚀 ~ file: index.js:49 ~ onFinish ~ result:", result);
-
-    await getDevicesData();
-    setIsDeviceModelOpen(false);
-  }, []);
+    console.log(
+      "🚀 ~ file: index.js:67 ~ onNewSensorFinish ~ response:",
+      response
+    );
+    if (response.ok) {
+      setDeviceMessage(`Device ${selectedDeviceId} updated successfully!`);
+    } else {
+      setDeviceMessage("Update was not successful. Please try again");
+    }
+  };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
@@ -210,87 +227,254 @@ const ProfilePage = () => {
       </Col>
       <Col span={24}>
         <Card title={<Title level={2}>Devices</Title>} bordered={false}>
-          <Row style={{ paddingTop: "20px", paddingBottom: "20px" }}>
+          <Row
+            style={{
+              paddingTop: "20px",
+              paddingBottom: "20px",
+            }}
+          >
             <Col>
-              <Button type="primary" onClick={showDeviceModal}>
-                Add new device
-              </Button>
               <Modal
-                title="Add new device"
                 open={isDeviceModalOpen}
                 // onOk={onDeviceFinish}
                 onCancel={handleDeviceCancel}
-                okButtonProps={{
-                  form: "deviceForm",
-                  key: "submit",
-                  htmlType: "submit",
-                }}
+                footer={null}
+                width={"600px"}
               >
                 <Form
-                  name="update device"
-                  id="deviceForm"
-                  initialValues={{ remember: true }}
-                  onFinish={onDeviceFinish}
-                  onFinishFailed={onFinishFailed}
+                  name="validate_other"
+                  // {...formItemLayout}
+                  onFinish={onUpdateSensorFinish}
                 >
-                  <Form.Item name="device_name">
-                    <Input
-                      prefix={<UserOutlined className="site-form-item-icon" />}
-                      placeholder="Device name"
-                    />
-                  </Form.Item>
-                  <Form.Item name="location">
-                    <Input
-                      prefix={<LockOutlined className="site-form-item-icon" />}
-                      placeholder="Location"
-                    />
+                  <h1 className="main-heading">
+                    Update sensor {selectedDeviceId}
+                  </h1>
+                  <Row style={{ paddingBottom: "10px" }}>
+                    <Col>
+                      <Typography>
+                        Note: You can update one values or more...
+                      </Typography>
+                    </Col>
+                  </Row>
+                  <Form.Item name="deviceId" label={"Device ID"}>
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <InputNumber
+                        style={{
+                          width: "300px",
+                        }}
+                        min={0}
+                      />
+                    </div>
                   </Form.Item>
 
-                  <Form.Item name="id">
-                    <Input
-                      prefix={<UserOutlined className="site-form-item-icon" />}
-                      placeholder="Identifier"
-                    />
+                  <Form.Item name="deviceName" label="Device name">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <Input
+                        style={{
+                          width: "300px",
+                        }}
+                        min={0}
+                      />
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item name="LightCondition" label="Light Condition">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <Select style={{ width: "300px" }}>
+                        <option value="Direct sun">Direct sun</option>
+                        <option value="Partial shade">Partial shade</option>
+                      </Select>
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item name="GrassType" label="Grass Type">
+                    {" "}
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <Select style={{ width: "300px" }}>
+                        <option value="Ryegrass">Ryegrass</option>
+                        <option value="Floratam">Floratam</option>
+                        <option value="Fine Fescue">Fine Fescue</option>
+                        <option value="Bluegrass">Bluegrass</option>
+                        <option value="Bentgrass">Bentgrass</option>
+                      </Select>
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item name="SoilType" label="Soil Type">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <Select style={{ width: "300px" }}>
+                        <option value="Hard">Hard</option>
+                        <option value="Soft">Soft</option>
+                        <option value="Medium">Medium</option>
+                      </Select>
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item name="LoanSize" label="Loan size">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <InputNumber style={{ width: "300px" }} min={1} />
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item name="TubeCapacity" label="Tube capacity">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <InputNumber style={{ width: "300px" }} min={1} />
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item name="Mode" label="Mode">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <Radio.Group
+                        onChange={(e) => setMode(e.target.value)}
+                        defaultValue={"Automatic"}
+                        value={mode}
+                      >
+                        <Radio value={"Automatic"}>Automatic</Radio>
+                        <Radio value={"Manual"}>Manual</Radio>
+                      </Radio.Group>
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item
+                    wrapperCol={{
+                      span: 12,
+                      offset: 6,
+                    }}
+                  >
+                    <Space>
+                      <Button type="primary" htmlType="submit">
+                        Update
+                      </Button>
+                      <Button htmlType="reset">reset</Button>
+                      {deviceMessage && <div>{deviceMessage}</div>}
+                    </Space>
                   </Form.Item>
                 </Form>
               </Modal>
             </Col>
           </Row>
 
-          {devices.map((device) => (
+          {devices.map((device, idx) => (
             <>
               <Row style={{ paddingTop: "10px" }}>
                 <Col span={2}>
-                  <Text keyboard>{device.sensor.model}</Text>
+                  <Text keyboard>{device?.config?.name}</Text>
                 </Col>
               </Row>
               <Row style={{ paddingTop: "10px", gap: "5px" }}>
-                <Col style={{ width: "65px" }}>Identifier:</Col>
+                <Col style={{ width: "65px" }}>Unique ID:</Col>
                 <Col style={{ width: "205px" }}>
-                  <Input disabled defaultValue={device._id} />
+                  <Input disabled defaultValue={device?._id} />
                 </Col>
               </Row>
               <Row style={{ paddingTop: "10px", gap: "5px" }}>
-                <Col style={{ width: "65px" }}>Location:</Col>
+                <Col style={{ width: "65px" }}>ID:</Col>
                 <Col style={{ width: "205px" }}>
-                  <Input disabled defaultValue={device.sensor.location} />
+                  <Input disabled defaultValue={device?.config?.id} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Grass type:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device?.config?.grass} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>SoilType:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device?.config?.ground} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Light condition:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device?.config?.light} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Tube capacity:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input
+                    disabled
+                    defaultValue={device?.config?.liters_per_minute}
+                  />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Mode:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device?.config?.mode} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Loan size:</Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device?.config?.size} />
                 </Col>
               </Row>
               <Row style={{ paddingTop: "10px", gap: "5px" }}>
                 <Col style={{ width: "65px" }}>Humidity:</Col>
                 <Col style={{ width: "205px" }}>
-                  <Input disabled defaultValue={device.humidity} />
+                  <Input disabled defaultValue={device?.humidity} />
                 </Col>
               </Row>
               <Row style={{ paddingTop: "10px", gap: "5px" }}>
                 <Col style={{ width: "65px" }}>Added at: </Col>
                 <Col style={{ width: "205px" }}>
-                  <Input disabled defaultValue={device.createdAt} />
+                  <Input disabled defaultValue={device?.createdAt} />
                 </Col>
               </Row>
               <Row style={{ paddingTop: "15px", gap: "5px" }}>
                 <Col>
-                  <Button type="primary">Update device</Button>
+                  <Button
+                    type="primary"
+                    onClick={() => {
+                      setSelectedDeviceId(devices[idx]._id);
+                      showDeviceModal();
+                    }}
+                  >
+                    Update device
+                  </Button>
                 </Col>
                 <Col>
                   <Button

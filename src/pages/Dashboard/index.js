@@ -189,14 +189,14 @@ const DashboardPage = () => {
                   style={{ paddingTop: "45px", paddingLeft: "25px" }}
                   level={4}
                 >
-                  Device {idx + 1}: {device.sensor.model}{" "}
+                  Device {idx + 1}: {device?.config?.name}{" "}
                 </Title>
               </Col>
               <Col style={{ paddingTop: "36px" }} span={4}>
                 <Col>
                   <BiChip size={"2.5em"} />
                 </Col>
-                Identifier: {device.sensor.id}
+                Identifier: {device?.config?.id}
               </Col>
               <Col style={{ paddingTop: "36px" }} span={4}>
                 <Col>
@@ -209,13 +209,6 @@ const DashboardPage = () => {
                   )}
                 </Col>
                 {<Col>Ground humidity: {device.humidity}%</Col>}
-              </Col>
-
-              <Col style={{ paddingTop: "36px" }} span={4}>
-                <Col>
-                  <MdOutlineNotListedLocation size={"2.5em"} />
-                </Col>
-                Position: {device.sensor.location}
               </Col>
 
               <Divider />
