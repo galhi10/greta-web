@@ -8,6 +8,7 @@ import useToken from "../../hooks/useToken";
 import config from "../../config";
 import { useEffect } from "react";
 import { getCities, getCountries } from "../../api/weather";
+import { createDevice } from "../../api/devices";
 
 const formItemLayout = {
   labelCol: {
@@ -19,7 +20,8 @@ const formItemLayout = {
 };
 
 const ConfigPage = () => {
-  const [message, setMessage] = useState("");
+  const [configMessage, setConfigMessage] = useState("");
+  const [deviceMessage, setDeviceMessage] = useState("");
   const [config, setConfig] = useState({});
   const [cities, setCities] = useState([]);
   const [selectedCountry, setSelectedCountry] = useState([]);
@@ -30,24 +32,36 @@ const ConfigPage = () => {
     setMode(e.target.value);
   };
   const { token } = useToken();
-  const onFinish = async (values) => {
-    console.log("🚀 ~ file: index.js:34 ~ onFinish ~ values:", values);
-    const response = await SetConfig(
-      values.Country,
-      values.City,
-      values.GrassType,
-      values.Mode,
-      values.LoanSize,
-      values.SoilType,
-      values.Region,
-      values.TubeCapacity,
-      values.LightCondition,
-      token
-    );
+  const onSystemConfigFinish = async (values) => {
+    const response = await SetConfig(values.Country, values.City, token);
     if (response) {
-      setMessage("successfully updated");
+      setConfigMessage("successfully updated");
     } else {
-      setMessage("Update was not successful. Please try again");
+      setConfigMessage("Update was not successful. Please try again");
+    }
+  };
+
+  const onNewSensorFinish = async (values) => {
+    const response = await createDevice(token, {
+      config: {
+        id: values.deviceId,
+        mode: values.Mode,
+        name: values.deviceName,
+        grass: values.GrassType,
+        size: values.LoanSize,
+        ground: values.SoilType,
+        liters_per_minute: values.TubeCapacity,
+        light: values.LightCondition,
+      },
+    });
+    console.log(
+      "🚀 ~ file: index.js:67 ~ onNewSensorFinish ~ response:",
+      response
+    );
+    if (response.ok) {
+      setDeviceMessage("New device created successfully!");
+    } else {
+      setDeviceMessage("Update was not successful. Please try again");
     }
   };
 
@@ -64,16 +78,9 @@ const ConfigPage = () => {
     // make it as default values, so we'll be able to change only one field to submit
     async function fetchCountries() {
       const fetchedCountries = await getCountries(token);
-      console.log(
-        "🚀 ~ file: index.js:63 ~ fetchCountries ~ response2:",
-        fetchedCountries
-      );
+
       const countries = [];
       for (const country of fetchedCountries) {
-        console.log(
-          "🚀 ~ file: index.js:69 ~ fetchCountries ~ country:",
-          country
-        );
         countries.push({
           value: country,
           label: country == "IL" ? "Israel" : "Island",
@@ -108,13 +115,16 @@ const ConfigPage = () => {
   }, [selectedCountry]);
 
   const onCountrySelection = (value) => {
-    console.log("🚀 ~ file: index.js:107 ~ onCountrySelection ~ value:", value);
     setSelectedCountry(value);
   };
 
   return (
     <Card className="card">
-      <Form name="validate_other" {...formItemLayout} onFinish={onFinish}>
+      <Form
+        name="validate_other"
+        {...formItemLayout}
+        onFinish={onSystemConfigFinish}
+      >
         <h1 className="main-heading">System Configuration</h1>
 
         <Form.Item
@@ -157,6 +167,54 @@ const ConfigPage = () => {
         </Form.Item>
 
         <Form.Item
+          wrapperCol={{
+            span: 12,
+            offset: 6,
+          }}
+        >
+          <Space>
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+            <Button htmlType="reset">reset</Button>
+            {configMessage && <div>{configMessage}</div>}
+          </Space>
+        </Form.Item>
+      </Form>
+      <Form
+        name="validate_other"
+        {...formItemLayout}
+        onFinish={onNewSensorFinish}
+      >
+        <h1 className="main-heading">New sensor</h1>
+
+        <Form.Item
+          name="deviceId"
+          label="Device ID"
+          rules={[
+            {
+              required: true,
+              message: "Please insert device ID!",
+            },
+          ]}
+        >
+          <InputNumber style={{ width: "300px" }} min={0} />
+        </Form.Item>
+
+        <Form.Item
+          name="deviceName"
+          label="Device name"
+          rules={[
+            {
+              required: true,
+              message: "Please insert device name!",
+            },
+          ]}
+        >
+          <Input style={{ width: "300px" }} min={0} />
+        </Form.Item>
+
+        <Form.Item
           name="LightCondition"
           label="Light Condition"
           rules={[
@@ -166,7 +224,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Select style={{ width: "300px" }} placeholder={config.light}>
+          <Select style={{ width: "300px" }}>
             <option value="Direct sun">Direct sun</option>
             <option value="Partial shade">Partial shade</option>
           </Select>
@@ -182,7 +240,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Select style={{ width: "300px" }} placeholder={config.grass}>
+          <Select style={{ width: "300px" }}>
             <option value="Ryegrass">Ryegrass</option>
             <option value="Floratam">Floratam</option>
             <option value="Fine Fescue">Fine Fescue</option>
@@ -201,7 +259,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Select style={{ width: "300px" }} placeholder={config.ground}>
+          <Select style={{ width: "300px" }}>
             <option value="Hard">Hard</option>
             <option value="Soft">Soft</option>
             <option value="Medium">Medium</option>
@@ -218,11 +276,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <InputNumber
-            style={{ width: "300px" }}
-            min={1}
-            placeholder={config.size}
-          />
+          <InputNumber style={{ width: "300px" }} min={1} />
         </Form.Item>
 
         <Form.Item
@@ -235,11 +289,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <InputNumber
-            style={{ width: "300px" }}
-            min={1}
-            placeholder={config.liters_per_minute}
-          />
+          <InputNumber style={{ width: "300px" }} min={1} />
         </Form.Item>
 
         <Form.Item
@@ -270,10 +320,10 @@ const ConfigPage = () => {
         >
           <Space>
             <Button type="primary" htmlType="submit">
-              Submit
+              Add
             </Button>
             <Button htmlType="reset">reset</Button>
-            {message && <div>{message}</div>}
+            {deviceMessage && <div>{deviceMessage}</div>}
           </Space>
         </Form.Item>
       </Form>

@@ -30,7 +30,7 @@ const createDevice = async (token, device) => {
     })
     .then(async (response) => {
       console.log("🚀 ~ file: user.js:14 ~ .then ~ response:", response);
-      return response.data.data;
+      return response.data;
     })
     .catch(async (error) => {
       console.log("🚀 ~ file: user.js:17 ~ login ~ error:", error);
