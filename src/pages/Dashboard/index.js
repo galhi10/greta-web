@@ -1,36 +1,22 @@
-import React, { useCallback, useState } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
 import { TiWeatherSunny, TiWeatherPartlySunny } from "react-icons/ti";
 import { RiPlantLine } from "react-icons/ri";
-import { AiOutlineAlert } from "react-icons/ai";
 
-import { getUser, updateUser } from "../../api/user";
-import {
-  Button,
-  Col,
-  Form,
-  Input,
-  Row,
-  Typography,
-  Modal,
-  Divider,
-  message,
-  Table,
-} from "antd";
+import { Button, Col, Row, Typography, Divider, Table } from "antd";
 import Card from "../../components/antd/card";
-import { BiChip, BiRename } from "react-icons/bi";
+import { BiChip } from "react-icons/bi";
 import { MdOutlineNotListedLocation } from "react-icons/md";
 import "./index.css";
-import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import useToken from "../../hooks/useToken";
-import { deleteDevice, getDevices, setDevice } from "../../api/devices";
+import { getDevices, setDevice } from "../../api/devices";
 import { GetConfig } from "../../api/configuration";
 import { GetTemperature, getHumidity } from "../../api/weather";
 import { getSchedule, runAlgo } from "../../api/irrigation";
 import { BsDropletFill, BsDropletHalf, BsDroplet } from "react-icons/bs";
+import { TiLightbulb } from "react-icons/ti";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 const DashboardPage = () => {
   const [temperature, setTemperature] = useState(undefined);
@@ -40,7 +26,6 @@ const DashboardPage = () => {
   const [tableData, setTableData] = useState([]);
   const [config, setConfig] = useState({});
   const [irrigation, setIrrigation] = useState(false);
-  console.log("🚀 ~ file: index.js:40 ~ DashboardPage ~ config:", config);
   const { token } = useToken();
 
   useEffect(() => {
@@ -51,10 +36,6 @@ const DashboardPage = () => {
     }
     async function fetchSchedule() {
       const schedule = await getSchedule(token);
-      console.log(
-        "🚀 ~ file: index.js:48 ~ fetchSchedule ~ response:",
-        schedule
-      );
 
       const columns = [];
 
@@ -79,7 +60,6 @@ const DashboardPage = () => {
       }
 
       for (const row of data) {
-        console.log("🚀 ~ file: index.js:81 ~ fetchSchedule ~ row:", row);
         if (row.status === "Active") {
           setIrrigation(true);
         }
@@ -88,7 +68,6 @@ const DashboardPage = () => {
         row.irrigation_time += " seconds";
         row.irrigation_volume += " liter";
       }
-      console.log("🚀 ~ file: index.js:67 ~ fetchSchedule ~ data:", data);
 
       setTableColumns(columns);
       setTableData(data);
@@ -104,10 +83,7 @@ const DashboardPage = () => {
     }
     async function fetchHumidity() {
       const humidity = await getHumidity(config.city);
-      console.log(
-        "🚀 ~ file: index.js:91 ~ fetchHumidity ~ humidity:",
-        humidity
-      );
+
       setHumidity(humidity);
     }
     fetchTemp();
@@ -116,7 +92,7 @@ const DashboardPage = () => {
 
   const getDevicesData = async () => {
     const devices = await getDevices(token);
-    console.log("🚀 ~ file: index.js:39 ~ getDevicesData ~ devices:", devices);
+    console.log("🚀 ~ file: index.js:95 ~ getDevicesData ~ devices:", devices);
     if (devices.length) {
       setDevices(devices);
     } else {
@@ -127,6 +103,20 @@ const DashboardPage = () => {
   useEffect(() => {
     getDevicesData();
   }, []);
+
+  const onUpdateMode = async (deviceId, mode) => {
+    const response = await setDevice(token, {
+      _id: deviceId,
+      config: {
+        mode,
+      },
+    });
+    await getDevicesData();
+    console.log(
+      "🚀 ~ file: index.js:67 ~ onNewSensorFinish ~ response:",
+      response
+    );
+  };
 
   return (
     <Row>
@@ -210,6 +200,30 @@ const DashboardPage = () => {
                 </Col>
                 {<Col>Ground humidity: {device.humidity}%</Col>}
               </Col>
+              <Col style={{ paddingTop: "36px" }} span={4}>
+                <Col>
+                  <TiLightbulb size={"2.5em"} />
+                </Col>
+                Mode: {device?.config?.mode}
+                <Col>
+                  <Button
+                    type="primary"
+                    onClick={async () => {
+                      await onUpdateMode(
+                        device?._id,
+                        device?.config?.mode === "Automatic"
+                          ? "Manual"
+                          : "Automatic"
+                      );
+                    }}
+                  >
+                    Change mode to{" "}
+                    {device?.config?.mode === "Automatic"
+                      ? "Manual"
+                      : "Automatic"}
+                  </Button>
+                </Col>
+              </Col>
 
               <Divider />
             </Row>
@@ -217,15 +231,6 @@ const DashboardPage = () => {
 
           {irrigation && (
             <Row>
-              {/* <Col
-                span={2}
-                style={{
-                  height: "min-content",
-                  paddingTop: "27px",
-                }}
-              >
-                <AiOutlineAlert color="red" size={"4em"} />
-              </Col> */}
               <Col
                 span={2}
                 style={{
