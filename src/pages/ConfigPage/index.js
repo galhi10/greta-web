@@ -54,10 +54,7 @@ const ConfigPage = () => {
         light: values.LightCondition,
       },
     });
-    console.log(
-      "🚀 ~ file: index.js:67 ~ onNewSensorFinish ~ response:",
-      response
-    );
+
     if (response.ok) {
       setDeviceMessage("New device created successfully!");
     } else {
@@ -302,11 +299,7 @@ const ConfigPage = () => {
             },
           ]}
         >
-          <Radio.Group
-            onChange={onChange}
-            defaultValue={"Automatic"}
-            value={mode}
-          >
+          <Radio.Group onChange={onChange} value={mode}>
             <Radio value={"Automatic"}>Automatic</Radio>
             <Radio value={"Manual"}>Manual</Radio>
           </Radio.Group>

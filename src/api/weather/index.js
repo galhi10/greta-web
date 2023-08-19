@@ -3,11 +3,12 @@ import config from "../../config";
 const weatherAPI = "weatherApi";
 
 // to complete
-const GetTemperature = async (city) => {
+const GetTemperature = async (city, country) => {
   console.log("city is:", city);
   const response = await axios
     .post(`${config.path}${weatherAPI}/getTemp`, {
       city,
+      country,
     })
     .then((response) => {
       console.log("🚀 get Success", response);
@@ -39,10 +40,11 @@ const getWeatherAlert = async (city, country) => {
   return response;
 };
 
-const getHumidity = async (city) => {
+const getHumidity = async (city, country) => {
   const response = await axios
     .post(`${config.path}${weatherAPI}/getAirHumidity`, {
       city,
+      country,
     })
     .then((response) => {
       console.log("🚀 get Success", response);
