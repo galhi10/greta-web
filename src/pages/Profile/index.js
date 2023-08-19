@@ -366,7 +366,6 @@ const ProfilePage = () => {
                     >
                       <Radio.Group
                         onChange={(e) => setMode(e.target.value)}
-                        defaultValue={"Automatic"}
                         value={mode}
                       >
                         <Radio value={"Automatic"}>Automatic</Radio>
