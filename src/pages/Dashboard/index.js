@@ -78,16 +78,18 @@ const DashboardPage = () => {
 
   useEffect(() => {
     async function fetchTemp() {
-      const temp = await GetTemperature(config.city);
+      const temp = await GetTemperature(config.city, config.country);
       setTemperature(temp);
     }
     async function fetchHumidity() {
-      const humidity = await getHumidity(config.city);
+      const humidity = await getHumidity(config.city, config.country);
 
       setHumidity(humidity);
     }
-    fetchTemp();
-    fetchHumidity();
+    if (config.city && config.country) {
+      fetchTemp();
+      fetchHumidity();
+    }
   }, [config]);
 
   const getDevicesData = async () => {

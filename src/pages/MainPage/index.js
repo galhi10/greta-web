@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { login } from "../../api/user";
-import { Button, Checkbox, Col, Form, Input, Row, Typography } from "antd";
-import Card from "../../components/antd/card";
-import { getUser, updateUser } from "../../api/user";
+import { Col, Row } from "antd";
+import { getUser } from "../../api/user";
 import "./index.css";
 import { useEffect } from "react";
 import backgroundImage5 from "./tree.jpg";
@@ -41,7 +38,7 @@ function MainPage() {
 
   useEffect(() => {
     async function fetchTemp() {
-      const temp = await GetTemperature(config.city);
+      const temp = await GetTemperature(config.city, config.country);
       setTemperature(temp);
     }
     async function getExtremeWeatherAlert() {
@@ -52,8 +49,10 @@ function MainPage() {
         }
       }
     }
-    fetchTemp();
-    getExtremeWeatherAlert();
+    if (config.city && config.country) {
+      fetchTemp();
+      getExtremeWeatherAlert();
+    }
   }, [config]);
 
   return (
