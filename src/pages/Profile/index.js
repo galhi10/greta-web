@@ -16,6 +16,7 @@ import {
   Select,
   Radio,
   Space,
+  Slider,
 } from "antd";
 import Card from "../../components/antd/card";
 
@@ -43,6 +44,8 @@ const ProfilePage = () => {
   const [messageApi, contextHolder] = message.useMessage();
   const [deviceMessage, setDeviceMessage] = useState("");
   const [mode, setMode] = useState(undefined);
+  const [minHumidity, setMinHumidity] = useState(0);
+  const [maxHumidity, setMaxHumidity] = useState(100);
   const [selectedDeviceId, setSelectedDeviceId] = useState(undefined);
 
   const removeDeviceMessage = (id) => {
@@ -120,6 +123,8 @@ const ProfilePage = () => {
         ground: values.SoilType,
         liters_per_minute: values.TubeCapacity,
         light: values.LightCondition,
+        min_humidity: minHumidity,
+        max_humidity: maxHumidity,
       },
     });
     console.log(
@@ -371,6 +376,42 @@ const ProfilePage = () => {
                         <Radio value={"Automatic"}>Automatic</Radio>
                         <Radio value={"Manual"}>Manual</Radio>
                       </Radio.Group>
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item
+                    name="minHumidity"
+                    label="Minimun desired humidity"
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <Slider
+                        onChange={(value) => setMinHumidity(value)}
+                        defaultValue={0}
+                        style={{ width: "300px" }}
+                      />
+                    </div>
+                  </Form.Item>
+
+                  <Form.Item
+                    name="maxHumidity"
+                    label="Maximun desired humidity"
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "right",
+                      }}
+                    >
+                      <Slider
+                        onChange={(value) => setMaxHumidity(value)}
+                        defaultValue={100}
+                        style={{ width: "300px" }}
+                      />
                     </div>
                   </Form.Item>
 

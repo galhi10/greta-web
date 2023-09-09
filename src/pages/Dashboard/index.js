@@ -255,7 +255,7 @@ const DashboardPage = () => {
             </Col>
           </Row>
 
-          <Row>
+          {/* <Row>
             <Col span={24}>
               <Button
                 type="primary"
@@ -266,7 +266,7 @@ const DashboardPage = () => {
                 Run algorithm
               </Button>
             </Col>
-          </Row>
+          </Row> */}
         </Card>
       </Col>
     </Row>

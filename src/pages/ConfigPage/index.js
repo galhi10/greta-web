@@ -56,7 +56,9 @@ const ConfigPage = () => {
     });
 
     if (response.ok) {
-      setDeviceMessage("New device created successfully!");
+      setDeviceMessage(
+        "New device created successfully, Note that minimun and maximun humidity values will be added according to device configuration options"
+      );
     } else {
       setDeviceMessage("Update was not successful. Please try again");
     }
