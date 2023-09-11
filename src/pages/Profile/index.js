@@ -493,7 +493,7 @@ const ProfilePage = () => {
                 </Col>
               </Row>
               <Row style={{ paddingTop: "10px", gap: "5px" }}>
-                <Col style={{ width: "65px" }}>Humidity:</Col>
+                <Col style={{ width: "65px" }}>Current humidity:</Col>
                 <Col style={{ width: "205px" }}>
                   <Input disabled defaultValue={device?.humidity} />
                 </Col>
@@ -502,6 +502,18 @@ const ProfilePage = () => {
                 <Col style={{ width: "65px" }}>Added at: </Col>
                 <Col style={{ width: "205px" }}>
                   <Input disabled defaultValue={device?.createdAt} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Min humidity: </Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device?.config?.min_humidity} />
+                </Col>
+              </Row>
+              <Row style={{ paddingTop: "10px", gap: "5px" }}>
+                <Col style={{ width: "65px" }}>Max humidity: </Col>
+                <Col style={{ width: "205px" }}>
+                  <Input disabled defaultValue={device?.config?.max_humidity} />
                 </Col>
               </Row>
               <Row style={{ paddingTop: "15px", gap: "5px" }}>
